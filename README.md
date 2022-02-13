@@ -9,6 +9,7 @@
     * [Configurazione del repository](#configurazione-del-repository)
     * [Installazione di Docker Engine](#installazione-di-docker-engine)
     * [Installazione container Docker di Virtuoso](#installazione-container-docker-di-virtuoso)
+* [Utilizzo di Virtuoso](#utilizzo-di-virtuoso)
 
 ## Introduzione
 
@@ -254,3 +255,9 @@ http://localhost:8890/
 ```
 
 La parte di connessione a Virtuoso viene descritta nei dettagli in seguito.
+
+## Utilizzo di Virtuoso
+
+Per utilizzare Virtuoso bisogna avere la possibilità di accederci da UI, quindi tramite l'utilizzo di un browser. Come già raccontato nell'ultima parte del capitolo "[Installazione tool per utilizzare la macchina virtuale](#installazione-tool-per-utilizzare-la-macchina-virtuale)", è stato configurato un browser embedded allo stesso URL del server HTTP di Virtuoso, come configurato nell'ultima parte di "[Installazione container Docker di Virtuoso](#installazione-container-docker-di-virtuoso)" , quindi basterà aprire una sessione da MobaXTerm e cliccando su quella creata per il browser, come si può vedere dall'immagine successiva, si arriverà alla schermata principale di Virtuoso.
+
+![plot](./Images/MobaXTerm_6.jpg)
