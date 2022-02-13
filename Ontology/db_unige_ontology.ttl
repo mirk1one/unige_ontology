@@ -1,0 +1,216 @@
+@prefix ug: <http://www.unige.it/2022/01/> .
+@prefix sc: <http://www.schema.org/> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ug:CollegeOrUniversityBuilding rdfs:subClassOf sc:CollegeOrUniversity .
+ug:Department rdfs:subClassOf sc:EducationOrganization .
+
+ug:occupationDepartment rdf:type rdf:Property .
+ug:occupationDepartment rdfs:label "Il dipartimento in cui la persona occupa il ruolo" .
+ug:occupationDepartment rdfs:domain sc:Occupation .
+ug:occupationDepartment rdfs:range ug:Department .
+sc:Occupation ug:occupationDepartment ug:Department .
+
+ug:geo rdf:type rdf:Property .
+ug:geo rdfs:label "Connette un punto geolocalizzato ad un posto" .
+ug:geo rdfs:domain sc:Place .
+ug:geo rdfs:range geo:Point .
+
+ug:roomCode rdf:type rdf:Property .
+ug:roomCode rdfs:label "Aggiunge il codice della stanza dove lavora" .
+ug:roomCode rdfs:domain sc:ContactPoint .
+ug:roomCode rdfs:range sc:Text .
+
+ug:link rdf:type rdf:Property .
+ug:link rdfs:label "Collega un url al suo relativo collegamento" .
+ug:link rdfs:domain sc:URL .
+ug:link rdfs:range sc:Text .
+
+<https://rubrica.unige.it/edifici/ED_161450201> rdf:type ug:CollegeOrUniversityBuilding .
+<https://rubrica.unige.it/edifici/ED_161450201> sc:name "Villa Bonino" .
+<https://rubrica.unige.it/edifici/ED_161450201> sc:address ug:Viale_Causa.
+
+ug:Viale_Causa sc:address <https://rubrica.unige.it/edifici/ED_161450201> .
+ug:Viale_Causa rdf:type sc:PostalAddress .
+ug:Viale_Causa sc:addressLocality "GENOVA" .
+ug:Viale_Causa sc:streetAddress "Viale Causa 13" .
+ug:Viale_Causa sc:postalCode "16100"^^xsd:Int .
+
+<https://rubrica.unige.it/edifici/ED_171000104> rdf:type ug:CollegeOrUniversityBuilding .
+<https://rubrica.unige.it/edifici/ED_171000104> sc:name "Campus di Savona - palazzina Lagorio" .
+<https://rubrica.unige.it/edifici/ED_171000104> sc:address ug:Via_Magliotto.
+
+ug:Via_Magliotto sc:address <https://rubrica.unige.it/edifici/ED_171000104> .
+ug:Via_Magliotto rdf:type sc:PostalAddress .
+ug:Via_Magliotto sc:addressLocality "SAVONA" .
+ug:Via_Magliotto sc:streetAddress "Via Magliotto 2" .
+ug:Via_Magliotto sc:postalCode "17100"^^xsd:Int .
+
+<https://rubrica.unige.it/edifici/ED_161450201> sc:employee <https://rubrica.unige.it/personale/VUZCWVtr> .
+<https://rubrica.unige.it/personale/VUZCWVtr> sc:affiliation <https://rubrica.unige.it/edifici/ED_161450201> .
+<https://rubrica.unige.it/edifici/ED_171000104> sc:employee <https://rubrica.unige.it/personale/VUZCWVtr> .
+<https://rubrica.unige.it/personale/VUZCWVtr> sc:affiliation <https://rubrica.unige.it/edifici/ED_171000104> .
+<https://rubrica.unige.it/personale/VUZCWVtr> rdf:type sc:Person .
+<https://rubrica.unige.it/personale/VUZCWVtr> sc:givenName "Gianni" .
+<https://rubrica.unige.it/personale/VUZCWVtr> sc:familyName "Vercelli" .
+
+<https://rubrica.unige.it/personale/VUZCWVtr> sc:hasOccupation <https://rubrica.unige.it/ruoli/PA> .
+<https://rubrica.unige.it/ruoli/PA> sc:hasOccupation <https://rubrica.unige.it/personale/VUZCWVtr> .
+<https://rubrica.unige.it/ruoli/PA> rdf:type sc:Occupation .
+<https://rubrica.unige.it/ruoli/PA> sc:qualifications "Professore associato" .
+
+<https://rubrica.unige.it/personale/VUZCWVtr> sc:contactPoint ug:Vercelli_Contacts1 .
+ug:Vercelli_Contacts1 sc:contactPoint <https://rubrica.unige.it/personale/VUZCWVtr>.
+ug:Vercelli_Contacts1 rdf:type sc:ContactPoint .
+ug:Vercelli_Contacts1 sc:email "gianni.vercelli@unige.it" .
+ug:Vercelli_Contacts1 sc:telephone "+390103352814" .
+ug:Vercelli_Contacts1 sc:contactType "Contatti Genova" .
+ug:Vercelli_Contacts1 sc:areaServed "Villa Bonino" .
+ug:Vercelli_Contacts1 ug:roomCode "ST.014" .
+
+<https://rubrica.unige.it/personale/VUZCWVtr> sc:contactPoint ug:Vercelli_Contacts2 .
+ug:Vercelli_Contacts2 sc:contactPoint <https://rubrica.unige.it/personale/VUZCWVtr>.
+ug:Vercelli_Contacts2 rdf:type sc:ContactPoint .
+ug:Vercelli_Contacts2 sc:email "gianni.vercelli@unige.it" .
+ug:Vercelli_Contacts2 sc:telephone "+390103352814" .
+ug:Vercelli_Contacts2 sc:contactType "Contatti Savona" .
+ug:Vercelli_Contacts2 sc:areaServed "Campus di Savona - palazzina Lagorio" .
+ug:Vercelli_Contacts2 ug:roomCode "T.007" .
+
+<https://rubrica.unige.it/spazi/planimetrie/US_161450201.ST.014> sc:url ug:Vercelli_Contacts1 .
+ug:Vercelli_Contacts1 sc:url <https://rubrica.unige.it/spazi/planimetrie/US_161450201.ST.014> .
+<https://rubrica.unige.it/spazi/planimetrie/US_161450201.ST.014> rdf:type sc:URL .
+<https://rubrica.unige.it/spazi/planimetrie/US_161450201.ST.014> sc:description "Planimetria stanza ST.014" .
+<https://rubrica.unige.it/spazi/planimetrie/US_161450201.ST.014> ug:link "https://rubrica.unige.it/spazi/planimetrie/US_161450201.ST.014" .
+
+<https://rubrica.unige.it/spazi/planimetrie/US_171000104.T.007> sc:url ug:Vercelli_Contacts2 .
+ug:Vercelli_Contacts2 sc:url <https://rubrica.unige.it/spazi/planimetrie/US_171000104.T.007> .
+<https://rubrica.unige.it/spazi/planimetrie/US_171000104.T.007> rdf:type sc:URL .
+<https://rubrica.unige.it/spazi/planimetrie/US_171000104.T.007> sc:description "Planimetria stanza T.007" .
+<https://rubrica.unige.it/spazi/planimetrie/US_171000104.T.007> ug:link "https://rubrica.unige.it/spazi/planimetrie/US_171000104.T.007" .
+
+<https://rubrica.unige.it/personale/VUZCWVtr> sc:url <https://cpc-prod.csita.unige.it/output_cv/UEZFWlg%253D/cv_it.pdf?ts=1643650104> .
+<https://cpc-prod.csita.unige.it/output_cv/UEZFWlg%253D/cv_it.pdf?ts=1643650104> sc:url <https://rubrica.unige.it/personale/VUZCWVtr> .
+<https://cpc-prod.csita.unige.it/output_cv/UEZFWlg%253D/cv_it.pdf?ts=1643650104> rdf:type sc:URL .
+<https://cpc-prod.csita.unige.it/output_cv/UEZFWlg%253D/cv_it.pdf?ts=1643650104> sc:description "Curriculum Vitae (Italiano)" .
+<https://cpc-prod.csita.unige.it/output_cv/UEZFWlg%253D/cv_it.pdf?ts=1643650104> ug:link "https://cpc-prod.csita.unige.it/output_cv/UEZFWlg%253D/cv_it.pdf?ts=1643650104" .
+
+<https://rubrica.unige.it/personale/VUZCWVtr> sc:image ug:Vercelli_Immagine .
+ug:Vercelli_Immagine sc:image <https://rubrica.unige.it/personale/VUZCWVtr> .
+ug:Vercelli_Immagine rdf:type sc:ImageObject .
+ug:Vercelli_Immagine sc:caption "image" .
+ug:Vercelli_Immagine sc:encodingFormat "jpg" .
+ug:Vercelli_Immagine sc:height "500"^^xsd:Int .
+ug:Vercelli_Immagine sc:width "500"^^xsd:Int .
+
+ug:Vercelli_Immagine sc:url <https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139> .
+<https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139> sc:url ug:Vercelli_Immagine .
+<https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139> rdf:type sc:URL .
+<https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139> sc:description "Immagine Gianni Vercelli" .
+<https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139> ug:link "https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139" .
+
+<https://rubrica.unige.it/strutture/struttura/100023> rdf:type ug:Department .
+<https://rubrica.unige.it/strutture/struttura/100023> sc:name "DIBRIS" .
+<https://rubrica.unige.it/strutture/struttura/100023> sc:legalName "Dipartimento di informatica, bioingegneria, robotica e ingegneria dei sistemi" .
+
+<https://rubrica.unige.it/strutture/struttura/100023> sc:url <https://dibris.unige.it/> .
+<https://dibris.unige.it/> sc:url <https://rubrica.unige.it/strutture/struttura/100023> .
+<https://dibris.unige.it/> rdf:type sc:URL .
+<https://dibris.unige.it/> sc:description "Sito web DIBRIS" .
+<https://dibris.unige.it/> ug:link "https://dibris.unige.it/" .
+
+<https://dibris.unige.it/> sc:department <https://rubrica.unige.it/edifici/ED_161450201> .
+<https://rubrica.unige.it/edifici/ED_161450201> sc:department <https://dibris.unige.it/> . 
+
+<https://rubrica.unige.it/strutture/struttura/100023> sc:address ug:Opera_Pia .
+ug:Opera_Pia sc:address <https://rubrica.unige.it/strutture/struttura/100023> .
+ug:Opera_Pia rdf:type sc:PostalAddress .
+ug:Opera_Pia sc:addressLocality "GENOVA" .
+ug:Opera_Pia sc:streetAddress "Viale Opera Pia 13" .
+ug:Opera_Pia sc:postalCode "16100" .
+
+<https://rubrica.unige.it/strutture/struttura/100023> sc:employee <https://rubrica.unige.it/personale/VUZCWVtr> .
+<https://rubrica.unige.it/personale/VUZCWVtr> sc:worksFor <https://rubrica.unige.it/strutture/struttura/100023> .
+
+<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts1 .
+ug:DIBRIS_Contacts1 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+ug:DIBRIS_Contacts1 rdf:type sc:ContactPoint .
+ug:DIBRIS_Contacts1 sc:telephone "+390103532194" .
+ug:DIBRIS_Contacts1 sc:contactType "Telefono 1 DIBRIS" .
+
+<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts2 .
+ug:DIBRIS_Contacts2 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+ug:DIBRIS_Contacts2 rdf:type sc:ContactPoint .
+ug:DIBRIS_Contacts2 sc:telephone "+390103532285" .
+ug:DIBRIS_Contacts2 sc:contactType "Telefono 2 DIBRIS" .
+
+<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts3 .
+ug:DIBRIS_Contacts3 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+ug:DIBRIS_Contacts3 rdf:type sc:ContactPoint .
+ug:DIBRIS_Contacts3 sc:fax "+390103532154" .
+ug:DIBRIS_Contacts3 sc:contactType "Fax 1 DIBRIS" .
+
+<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts4 .
+ug:DIBRIS_Contacts4 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+ug:DIBRIS_Contacts4 rdf:type sc:ContactPoint .
+ug:DIBRIS_Contacts4 sc:fax "+390103532948" .
+ug:DIBRIS_Contacts4 sc:contactType "Fax 2 DIBRIS" .
+
+<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts5 .
+ug:DIBRIS_Contacts5 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+ug:DIBRIS_Contacts5 rdf:type sc:ContactPoint .
+ug:DIBRIS_Contacts5 sc:email "amministrativi@dibris.unige.it" .
+ug:DIBRIS_Contacts5 sc:contactType "Email amministrativi DIBRIS" .
+
+<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts6 .
+ug:DIBRIS_Contacts6 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+ug:DIBRIS_Contacts6 rdf:type sc:ContactPoint .
+ug:DIBRIS_Contacts6 sc:email "info@dibris.unige.it" .
+ug:DIBRIS_Contacts6 sc:contactType "Email informazioni DIBRIS" .
+
+<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts7 .
+ug:DIBRIS_Contacts7 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+ug:DIBRIS_Contacts7 rdf:type sc:ContactPoint .
+ug:DIBRIS_Contacts7 sc:email "dibris@pec.unige.it" .
+ug:DIBRIS_Contacts7 sc:contactType "PEC DIBRIS" .
+
+<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts8 .
+ug:DIBRIS_Contacts8 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+ug:DIBRIS_Contacts8 rdf:type sc:ContactPoint .
+ug:DIBRIS_Contacts8 sc:email "direttore@dibris.unige.it" .
+ug:DIBRIS_Contacts8 sc:contactType "Email direttore di dipartimento" .
+
+<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts9 .
+ug:DIBRIS_Contacts9 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+ug:DIBRIS_Contacts9 rdf:type sc:ContactPoint .
+ug:DIBRIS_Contacts9 sc:email "segretario@dibris.unige.it" .
+ug:DIBRIS_Contacts9 sc:contactType "Email responsabile amministrativo" .
+
+<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts10 .
+ug:DIBRIS_Contacts10 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+ug:DIBRIS_Contacts10 rdf:type sc:ContactPoint .
+ug:DIBRIS_Contacts10 sc:email "ufficio.didattica@dibris.unige.it" .
+ug:DIBRIS_Contacts10 sc:contactType "Email ufficio didattica" .
+
+<https://rubrica.unige.it/edifici/ED_161450201> ug:geo ug:Villa_Bonino_Geopoint .
+ug:Villa_Bonino_Geopoint ug:geo <https://rubrica.unige.it/edifici/ED_161450201> .
+ug:Villa_Bonino_Geopoint rdf:Type geo:Point .
+ug:Villa_Bonino_Geopoint geo:lat "44.4013744"^^xsd:float .
+ug:Villa_Bonino_Geopoint geo:long "8.9599020"^^xsd:float .
+
+<https://rubrica.unige.it/strutture/struttura/100023> ug:geo Dibris_Geopoint .
+Dibris_Geopoint ug:geo <https://rubrica.unige.it/strutture/struttura/100023> .
+ug:Villa_Bonino_Geopoint rdf:Type geo:Point .
+Dibris_Geopoint geo:lat "44.4409459"^^xsd:float .
+Dibris_Geopoint geo:long "8.8814226"^^xsd:float .
+
+<https://rubrica.unige.it/ssd/ING-INF/05> rdf:type ug:Ssd .
+<https://rubrica.unige.it/ssd/ING-INF/05> sc:legalName "SISTEMI DI ELABORAZIONE DELLE INFORMAZIONI" .
+<https://rubrica.unige.it/ssd/ING-INF/05> sc:branchCode "ING-INF/05" .
+<https://rubrica.unige.it/ssd/ING-INF/05> sc:member <https://rubrica.unige.it/personale/VUZCWVtr> .
+<https://rubrica.unige.it/personale/VUZCWVtr> sc:member <https://rubrica.unige.it/ssd/ING-INF/05> .
