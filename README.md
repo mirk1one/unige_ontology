@@ -261,3 +261,100 @@ La parte di connessione a Virtuoso viene descritta nei dettagli in seguito.
 Per utilizzare Virtuoso bisogna avere la possibilità di accederci da UI, quindi tramite l'utilizzo di un browser. Come già raccontato nell'ultima parte del capitolo "[Installazione tool per utilizzare la macchina virtuale](#installazione-tool-per-utilizzare-la-macchina-virtuale)", è stato configurato un browser embedded allo stesso URL del server HTTP di Virtuoso, come configurato nell'ultima parte di "[Installazione container Docker di Virtuoso](#installazione-container-docker-di-virtuoso)" , quindi basterà aprire una sessione da MobaXTerm e cliccando su quella creata per il browser, come si può vedere dall'immagine successiva, si arriverà alla schermata principale di Virtuoso.
 
 ![plot](./Images/MobaXTerm_6.jpg)
+
+Le due sezioni principali di Virtuoso sono le seguenti:
+- `Conductor`: gestione del database di Virtuoso e delle configurazioni e delle opzioni. Utilizzeremo questa parte per configurare il database inserendo i linked data di Unige creati esternamente.
+- `SPARQL endpoint`: endpoint dove si possono richiamare le query SPARQL sul database. Questa sezione non è utile al nostro fine, se non solo per testare le query sul database.
+
+#### Configurazione del database
+
+Per prima cosa bisogna configurare il database per utilizzare i linked data in nostro possesso. Quindi partendo dalla pagina principale di Virtuso, si clicca su `Conductor` ed entrando nella nuova sezione non si potrà eseguire nulla finchè non si accede all'interno del sistema con delle credenziali (come si vede nell'immagine successiva).
+
+![plot](./Images/Virtuoso_1.jpg)
+
+Nella sezione in alto a sinistra ci si potrà loggare (nella zona evidenziata in rosso nell'immagine precedente) utilizzando come account `dba` (di default inserito nel sistema) e come password quella inserita nella configurazione del container Docker di Virtuoso (nel nostro esempio la password sarà anch'essa `dba`). A questo punto si potrà accedere a tutti tab presenti nella parte centrale, per le funzionalità a noi interessate cliccheremo su "Web Application Service" per aprire un editor del contenuto dei dati dell'application server, come si vede nell'immagine successiva.
+
+![plot](./Images/Virtuoso_2.jpg)
+
+I pulsanti nell'editor sono facilmente comprensibili, ma quelli a noi più interessanti sono i seguenti:
+
+- `Refresh`: si aggiorna la pagina, in caso di operazioni esterne non viene fatto automaticamente.
+- `Up`: si torna allo spazio precedente a quello dove ci si trova.
+- `New Folder`: si crea una cartella definita nel path in cui ci si trova.
+- `Delete`: si rimuove tutto ciò che è selezionato.
+- `Properties`: si aprono le proprietà degli elementi selezionati.
+- `Upload`: si carica un file esterno al sistema all'interno.
+
+A questo punto per iniziare a creare il database dobbiamo creare la locazione in cui si troveranno i linked data, quindi si preme su `New Folder` per arrivare nella schermata presentata successivamente.
+
+![plot](./Images/Virtuoso_3.jpg)
+
+In questa schermata sono stati già selezionati i valori che ci interessano, ma alla creazione non si troveranno tutti questi già impostati. Principalmente i dati a noi interessati che dobbiamo impostare sono:
+
+- `Folder name`: nome della cartella, nel nostro caso la nomineremo `Unige`.
+- `Folder type`: tipo della cartella, è necessario configurarla con il valore `Linked Data Import`.
+- `Owner`: proprietario della cartella, che dobbiamo selezionare come l'utente che utilizziamo, nel nostro caso sarà `dba`. E' importante settare nel modo giusto questa opzione per non incorrere in problematiche di modifica.
+- `Group`: gruppo della cartella, che possiamo lasciare ad `administrator` nel caso utilizzassimo l'utente `dba`, altrimenti possiamo assegnare un gruppo da noi creato tramite le altre sezioni (che non spieghero in quanto non necessarie) oppure impostando il valore `nogroup`. Come per `Owner` è importante impostare il gruppo giusto per non incorrere nelle problematiche descritte precedentemente.
+- `Permissions`: permessi relativi alla cartella, identici a quelli di Linux, nel nostro caso possiamo non toccarli e lasciarli configurati come quelli di default (rw-r-----).
+
+Gli altri campi non li descrivo in quanto non interessanti nel nostro caso. Avendo scelto come `Folder type` il valore `Linked Data Import`, si aggiungerà un altro tab proprio con quel nome (come si può vedere nell'immagine precedente, in quanto già selezionato come valore) e cliccandoci sopra avremo la schermata della successiva immagine.
+
+![plot](./Images/Virtuoso_4.jpg)
+
+Anche in questa schermata sono stati già selezionati i valori che ci interessano. I dati principali a noi interessati che dobbiamo impostare sono:
+
+- `Graph name`: nome del grafo, che rappresenta il prefisso dell'ontologia che di vuole aggiungere, infatti al momento del richiamo delle classi verrà utilizzata quel nome per gli elementi creati non seguendo gli schemi già esistenti, quindi nel nostro caso sarà impostato con il valore `http://www.unige.it/2022/01/`.
+- `Base URI`: URI di base riferito alla cartella, che sarebbe il path che dalla folder prinicipale si arriva alla folder che verrà creata, in questo caso basta lasciare quella di base definita.
+- `Output Content Type`: tipo del contenuto dell'output relativo ai linked data inseriti all'interno, lasceremo impostato il valore `text/turtle`.
+
+Infine cliccando sul pulsante `Create`, si creerà la cartella che conterrà all'interno i linked data del database di Unige.
+
+#### Inserimento dei linked data nel database
+
+Dopo aver creato la base del nostro database, a questo punto si può cliccare nella cartella creata nella sezione precedente e inserire i dati a noi interessati. Quindi di cliccherà il pulsante `Upload` che aprirà una nuova schermata come si può vedere nell'immagine successiva.
+
+![plot](./Images/Virtuoso_5.jpg)
+
+In questa schermata sono stati già selezionati i valori che ci interessano, ma alla creazione non si troveranno tutti questi già impostati. Principalmente i dati a noi interessati che dobbiamo impostare sono:
+
+- `Source`: quale tipo di dato vogliamo importare, lasceremo impostato il valore `File`.
+- `File`: questo campo è visualizzato per il valore scelto precedentemente. Cliccando su `Scegli file` potremo caricare dalle cartelle del nostro pc il file interessato. In questo caso caricherò il file `db_unige_ontology.ttl` che sarebbe il file che si trova in questa repository sotto la cartella `Ontology`.
+- `File name`: il nome del file caricato, questo sarà impostato automaticamente al caricamento del file.
+- `Owner`: proprietario della cartella, che dobbiamo selezionare come l'utente che utilizziamo, nel nostro caso sarà `dba`. E' importante settare nel modo giusto questa opzione per non incorrere in problematiche di modifica.
+- `Group`: gruppo della cartella, che possiamo lasciare ad `administrator` nel caso utilizzassimo l'utente `dba`, altrimenti possiamo assegnare un gruppo da noi creato tramite le altre sezioni (che non spieghero in quanto non necessarie) oppure impostando il valore `nogroup`. Come per `Owner` è importante impostare il gruppo giusto per non incorrere nelle problematiche descritte precedentemente.
+- `Permissions`: permessi relativi alla cartella, identici a quelli di Linux, nel nostro caso possiamo non toccarli e lasciarli configurati come quelli di default (rw-r-----).
+
+Gli altri campi non li descrivo in quanto non interessanti nel nostro caso. Cliccando quindi sul pulsante `Upload`, il file sarà caricato all'interno della nostra folder, quindi anche nel database di Virtuoso.
+
+Il nostro database ora conterrà i dati interessati, ma l'unico problema è che non esiste ancora il link diretto per poterli richiamare, quindi a questo punto ci sposteremo sulla console SSH e tramite il seguente commando si creerà questo collegamento tra il database e il file dei linked data importato precedentemente.
+
+```sh
+$ curl -t db_unige_ontology.ttl http://130.251.22.225:8890/DAV/home/dba/Unige/ -u dba:dba
+```
+
+Il comando precedente deve essere richiamato con `curl` seguito dall'opzione `-t` per inserire il file dal quale creare il link con il database seguito dall'URI relativo alla cartella riferita e con `-u` inserendo l'utente seguito dalla password separati da `:`. Il comando precedente si basa sulle impostazioni definite nel nostro esempio.
+
+Utilizzando questo comando avremo creato un file vuoto che farà da riferimento tra linked data e database, come si può vedere nell'immagine successiva.
+
+![plot](./Images/Virtuoso_6.jpg)
+
+A questo punto, per testare che si sia veramente creato questa connessione tra database e dati, si torna alla pagina principale di Virtuoso (cliccando sul pulsante in alto a destra `Home`) e si clicca su `SPARQL endpoint`. Si aprirà un editor di query come si può vedere nell'immagine successiva.
+
+![plot](./Images/Virtuoso_7.jpg)
+
+Per testare il funzionamento, basta richiamare la seguente query SPARQL:
+
+```
+SELECT * 
+FROM <http://www.unige.it/2022/01/>
+WHERE 
+  {
+    ?s ?p ?o
+  }
+```
+
+Non variando gli altri parametri e cliccando sul pulsante `Execute Query`, ci verrà restituito in output una lista HTML di tutti gli elementi presenti nel database, come si può vedere nell'immagine successiva.
+
+![plot](./Images/Virtuoso_8.jpg)
+
+Con questo risultato, è stato verificato effettivamente che tutti i passaggi fatti precedentemente sono andati a buon fine.
