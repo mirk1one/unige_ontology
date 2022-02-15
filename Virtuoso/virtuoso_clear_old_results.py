@@ -1,9 +1,15 @@
 import os
-import sys
+import argparse
 import shutil
 import time
 
-days = input("Inserire il numero di giorni oltre il quale le cartelle verranno rimosse: ")
+parser = argparse.ArgumentParser(description = "Parser per query")
+parser.add_argument("-d", "--days", help = "Numero dei giorni", required = True)
+
+argument = parser.parse_args()
+days = argument.days
+
+print(f"\nIl numero di giorni oltre il quale le cartelle verranno rimosse è di {days} giorni\n")
 path = "./"
 now = time.time()
 old = now - (days * 24 * 60 * 60) 

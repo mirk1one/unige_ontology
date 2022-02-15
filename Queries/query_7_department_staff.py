@@ -1,7 +1,13 @@
+import argparse
 from virtuoso_call_sparql import call_local_sparql
 
-print("Data la sigla di un dipartimento, restituisce tutto il personale del dipartimento e i loro dati\n")
-dipartimento = input("Inserire la sigla del dipartimento: ")
+parser = argparse.ArgumentParser(description = "Parser per query")
+parser.add_argument("-c", "--code", help = "Sigla del dipartimento", required = True)
+
+argument = parser.parse_args()
+dipartimento = argument.code
+
+print(f"\nData la sigla di un dipartimento {dipartimento}, restituisce tutto il personale del dipartimento e i loro dati\n")
 
 select = ["dipartimento", "nome", "qualifica", "afferenza", "contatti"]
 
@@ -12,9 +18,9 @@ PREFIX sc: <http://www.schema.org/>
 SELECT DISTINCT ?dipartimento ?nome ?qualifica ?afferenza (group_concat(?dato_contatto, '; ') as ?contatti)
 WHERE
 {
-	?dipartimento rdf:type ug:Department .
-	?dipartimento sc:name ?sigla .
-	?dipartimento sc:legalName ?nome_legale .
+  ?dipartimento rdf:type ug:Department .
+  ?dipartimento sc:name ?sigla .
+  ?dipartimento sc:legalName ?nome_legale .
   BIND(CONCAT(?nome_legale, " - ", ?sigla) AS ?afferenza) .
   ?dipartimento sc:employee ?persona .
   ?persona sc:givenName ?nome_persona .
@@ -25,15 +31,15 @@ WHERE
   ?occupazione sc:hasOccupation ?persona .
   ?persona sc:contactPoint ?contatto .
   {
-     ?contatto sc:telephone ?valore_contatto .
-     ?contatto sc:contactType ?tipo_contatto .
-     BIND(CONCAT(?valore_contatto, " ", ?tipo_contatto) AS ?dato_contatto) .
-  } UNION
-  {
+    ?contatto sc:telephone ?valore_contatto .
+    ?contatto sc:contactType ?tipo_contatto .
+    BIND(CONCAT(?valore_contatto, " ", ?tipo_contatto) AS ?dato_contatto) .
+   } UNION
+   {
      ?contatto sc:email ?valore_contatto .
      ?contatto sc:contactType ?tipo_contatto .
      BIND(CONCAT(?valore_contatto, " ", ?tipo_contatto) AS ?dato_contatto) .
-  }
+   }
 	FILTER (?sigla = \"""" + dipartimento + """\")
 }
 GROUP BY ?dipartimento ?nome ?qualifica ?afferenza"""

@@ -1,7 +1,13 @@
+import argparse
 from virtuoso_call_sparql import call_local_sparql
 
-print("Data la sigla di un ssd, restituisce tutte le persone affiliate\n")
-codice = input("Inserire la del ssd: ")
+parser = argparse.ArgumentParser(description = "Parser per query")
+parser.add_argument("-c", "--code", help = "Sigla del ssd", required = True)
+
+argument = parser.parse_args()
+codice = argument.code
+
+print(f"Data la sigla del ssd {codice}, restituisce tutte le persone affiliate\n")
 
 select = ["ssd", "nome", "afferenza", "telefono", "email"]
 
@@ -12,20 +18,20 @@ PREFIX sc: <http://www.schema.org/>
 SELECT DISTINCT ?ssd ?nome ?afferenza ?telefono ?email
 WHERE
 {
-	?ssd rdf:type ug:Ssd .
+  ?ssd rdf:type ug:Ssd .
   ?ssd sc:branchCode ?codice_ssd .
-	?ssd sc:member ?persona .
-	?persona sc:givenName ?nome_persona .
-	?persona sc:familyName ?cognome_persona .
+  ?ssd sc:member ?persona .
+  ?persona sc:givenName ?nome_persona .
+  ?persona sc:familyName ?cognome_persona .
   BIND(CONCAT(?nome_persona, " ", ?cognome_persona) AS ?nome) .
-	?persona sc:worksFor ?dipartimento .
+  ?persona sc:worksFor ?dipartimento .
   ?dipartimento sc:name ?sigla_dipartimento .
-	?dipartimento sc:legalName ?nome_dipartimento .
+  ?dipartimento sc:legalName ?nome_dipartimento .
   BIND(CONCAT(?nome_dipartimento, " - ", ?sigla_dipartimento) AS ?afferenza) .
-	?persona sc:contactPoint ?contatto .
-	OPTIONAL { ?contatto sc:telephone ?telefono } .
-	OPTIONAL { ?contatto sc:email ?email } .
-	FILTER (?codice_ssd = \"""" + codice + """\")
+  ?persona sc:contactPoint ?contatto .
+  OPTIONAL { ?contatto sc:telephone ?telefono } .
+  OPTIONAL { ?contatto sc:email ?email } .
+  FILTER (?codice_ssd = \"""" + codice + """\")
 }
 ORDER BY ?cognome_persona"""
     

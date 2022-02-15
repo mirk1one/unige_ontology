@@ -115,7 +115,7 @@ ug:Vercelli_Immagine sc:url <https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1
 <https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139> ug:link "https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139" .
 
 <https://rubrica.unige.it/strutture/struttura/100023> rdf:type ug:Department .
-<https://rubrica.unige.it/strutture/struttura/100023> sc:name "DIBRIS" .
+<https://rubrica.unige.it/strutture/struttura/100023> sc:branchCode "DIBRIS" .
 <https://rubrica.unige.it/strutture/struttura/100023> sc:legalName "Dipartimento di informatica, bioingegneria, robotica e ingegneria dei sistemi" .
 
 <https://rubrica.unige.it/strutture/struttura/100023> sc:url <https://dibris.unige.it/> .

@@ -8,12 +8,13 @@ query = """PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX ug: <http://www.unige.it/2022/01/>
 PREFIX sc: <http://www.schema.org/>
 PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+
 SELECT DISTINCT ?edificio ?nome ?indirizzo
 WHERE
 {
-	?edificio rdf:type ug:CollegeOrUniversityBuilding .
-	?edificio sc:name ?nome .
-	OPTIONAL
+  ?edificio rdf:type ug:CollegeOrUniversityBuilding .
+  ?edificio sc:name ?nome .
+  OPTIONAL
   {
     ?edificio sc:address ?luogo .
 	  ?luogo sc:streetAddress ?via .

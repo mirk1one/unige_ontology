@@ -48,11 +48,9 @@ sc:URL sc:url sc:ImageObject .
 
 ug:Department rdfs:subClassOf sc:EducationOrganization . #Definizione di dipartimento
 ug:Department sc:legalName sc:Text .
-ug:Department sc:name sc:Text .
 ug:Department sc:branchCode sc:Text .
 ug:Department sc:url sc:URL .
 sc:URL sc:url ug:Department .
-ug:Department sc:description sc:Text .
 ug:CollegeOrUniversityBuilding sc:department ug:Department . #Rappresenta la relazione tra struttura ed edificio
 ug:Department sc:department ug:CollegeOrUniversityBuilding . 
 ug:Department sc:address sc:PostalAddress .
@@ -66,21 +64,21 @@ ug:occupationDepartment rdfs:label "Il dipartimento in cui la persona occupa il 
 ug:occupationDepartment rdfs:domain sc:Occupation .
 ug:occupationDepartment rdfs:range ug:Department .
 sc:Occupation ug:occupationDepartment ug:Department .
+ug:Department ug:occupationDepartment sc:Occupation .
 ug:geo rdf:type rdf:Property .
 ug:geo rdfs:label "Connette un punto geolocalizzato ad un posto" .
 ug:geo rdfs:domain sc:Place .
 ug:geo rdfs:range geo:Point .
 ug:CollegeOrUniversityBuilding ug:geo geo:Point .
 geo:Point ug:geo ug:CollegeOrUniversityBuilding .
-ug:Department sc:geo geo:Point .
-geo:Point sc:geo ug:Department .
+ug:Department ug:geo geo:Point .
+geo:Point ug:geo ug:Department .
 geo:Point geo:lat xsd:Float .
 geo:Point geo:long xsd:Float .
 ug:roomCode rdf:type rdf:Property .
 ug:roomCode rdfs:label "Aggiunge il codice della stanza dove lavora" .
 ug:roomCode rdfs:domain sc:ContactPoint .
 ug:roomCode rdfs:range sc:Text .
-sc:ContactPoint ug:roomCode sc:Text .
 ug:link rdf:type rdf:Property .
 ug:link rdfs:label "Collega un url al suo relativo collegamento" .
 ug:link rdfs:domain sc:URL .

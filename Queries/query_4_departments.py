@@ -11,11 +11,11 @@ PREFIX sc: <http://www.schema.org/>
 SELECT DISTINCT ?dipartimento ?nome (count(distinct ?persona) as ?numero_afferenti)
 WHERE
 {
-	?dipartimento rdf:type ug:Department .
-	?dipartimento sc:name ?sigla .
-	?dipartimento sc:legalName ?nome_legale .
+  ?dipartimento rdf:type ug:Department .
+  ?dipartimento sc:name ?sigla .
+  ?dipartimento sc:legalName ?nome_legale .
   BIND(CONCAT(?nome_legale, " - ", ?sigla) AS ?nome) .
-	?dipartimento sc:employee ?persona .
+  ?dipartimento sc:employee ?persona .
 }
 GROUP BY ?dipartimento ?nome"""
     

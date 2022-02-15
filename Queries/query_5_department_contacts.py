@@ -1,7 +1,13 @@
+import argparse
 from virtuoso_call_sparql import call_local_sparql
 
-print("Data la sigla di un dipartimento, restituisce tutti i suoi contatti\n")
-dipartimento = input("Inserire la sigla del dipartimento: ")
+parser = argparse.ArgumentParser(description = "Parser per query")
+parser.add_argument("-c", "--code", help = "Sigla del dipartimento", required = True)
+
+argument = parser.parse_args()
+dipartimento = argument.code
+
+print(f"\nData la sigla del dipartimento {dipartimento}, restituisce tutti i suoi contatti\n")
 
 select = ["dipartimento", "nome", "tipo_contatto", "dettaglio_contatto", "altro_dato"]
 
@@ -16,7 +22,7 @@ WHERE
 	?dipartimento rdf:type ug:Department .
 	?dipartimento sc:name ?sigla .
 	?dipartimento sc:legalName ?nome_legale .
-  BIND(CONCAT(?nome_legale, " - ", ?sigla) AS ?nome) .
+   BIND(CONCAT(?nome_legale, " - ", ?sigla) AS ?nome) .
 	{
      ?dipartimento sc:address ?luogo .
      BIND("Indirizzo" AS ?tipo_contatto) .
@@ -28,37 +34,37 @@ WHERE
 	   ?coordinate geo:lat ?lat .
 	   ?coordinate geo:long ?long .
 	   BIND(CONCAT("https://google.com/maps?q=", STR(?lat), ",", STR(?long)) AS ?altro_dato) .
-  } UNION
-  {
+   } UNION
+   {
      ?dipartimento sc:contactPoint ?contatto .
      ?contatto sc:contactType ?tipo_contatto .
      ?contatto sc:telephone ?dettaglio_contatto .
      BIND("" AS ?altro_dato) .
-  } UNION
-  {
+   } UNION
+   {
      ?dipartimento sc:contactPoint ?contatto .
      ?contatto sc:contactType ?tipo_contatto .
      ?contatto sc:fax ?dettaglio_contatto .
      BIND("" AS ?altro_dato) .
-  } UNION
-  {
+   } UNION
+   {
      ?dipartimento sc:contactPoint ?contatto .
      ?contatto sc:contactType ?tipo_contatto .
      ?contatto sc:email ?dettaglio_contatto .
      BIND("" AS ?altro_dato) .
-  } UNION
-  {
+   } UNION
+   {
      ?dipartimento sc:contactPoint ?contatto .
      ?contatto sc:contactType ?tipo_contatto .
      ?contatto sc:telephone ?dettaglio_contatto .
      BIND("" AS ?altro_dato) .
-  } UNION
-  {
+   } UNION
+   {
      ?dipartimento sc:url ?contatto .
      ?contatto sc:description ?tipo_contatto .
      ?contatto ug:link ?dettaglio_contatto .
      BIND("" AS ?altro_dato) .
-  }
+   }
 	FILTER (?sigla = \"""" + dipartimento + """\")
 }"""
     

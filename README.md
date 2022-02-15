@@ -1,4 +1,4 @@
-# Installazione del server Virtuoso di Unige per la gestione di linked data
+# Installazione del server Virtuoso di Unige per la gestione dei linked data
 
 ## Tabella del contenuto
 
@@ -10,6 +10,14 @@
     * [Installazione di Docker Engine](#installazione-di-docker-engine)
     * [Installazione container Docker di Virtuoso](#installazione-container-docker-di-virtuoso)
 * [Utilizzo di Virtuoso](#utilizzo-di-virtuoso)
+    * [Configurazione del database](#configurazione-del-database)
+    * [Inserimento dei linked data nel database](#inserimento-dei-linked-data-nel-database)
+* [Ontologia di Unige](#ontologia-di-unige)
+* [Organizzazione dei files](#organizzazione-dei-files)
+    * [Creator](#creator)
+    * [Ontology](#ontology)
+    * [Queries](#queries)
+    * [Virtuoso](#virtuoso)
 
 ## Introduzione
 
@@ -309,7 +317,7 @@ Anche in questa schermata sono stati già selezionati i valori che ci interessan
 
 Infine cliccando sul pulsante `Create`, si creerà la cartella che conterrà all'interno i linked data del database di Unige.
 
-#### Inserimento dei linked data nel database
+### Inserimento dei linked data nel database
 
 Dopo aver creato la base del nostro database, a questo punto si può cliccare nella cartella creata nella sezione precedente e inserire i dati a noi interessati. Quindi di cliccherà il pulsante `Upload` che aprirà una nuova schermata come si può vedere nell'immagine successiva.
 
@@ -358,3 +366,440 @@ Non variando gli altri parametri e cliccando sul pulsante `Execute Query`, ci ve
 ![plot](./Images/Virtuoso_8.jpg)
 
 Con questo risultato, è stato verificato effettivamente che tutti i passaggi fatti precedentemente sono andati a buon fine.
+
+## Ontologia di Unige
+
+Ora passiamo a parlare della struttura dell'ontologia di Unige. Per costruire l'ontologia mi sono basato su [schema.org](https://schema.org) per la definizione delle entità e delle loro relazione, per le entità di geolocalizzazione ho utilizzato il vocabolario [geo di w3](https://www.w3.org/2003/01/geo/), invece per quanto riguarda gli elementi di nostra creazione si utilizza il namespace di [Unige](http://www.unige.it/2022/01/).
+
+L'ontologia si basa principalmente sulla suddivisione fatta all'interno della [Rubrica di Unige](https://rubrica.unige.it/). Lo schema dell'ontologia è rappresentato nell'immagine successiva.
+
+![plot](./Images/Ontologia_unige.jpg)
+
+Le principali classi che descrivono l'ontologia sono le seguenti (ug è il prefisso definito di Unige, ovvero http://www.unige.it/2022/01/):
+
+1) `ug:CollegeOrUniversityBuilding` : descrive gli edifici appartenenti all'università, sottoclasse di sc:CollegeOrUniversity.
+2) `ug:Department` : descrive i dipartimenti di Unige, sottoclasse di sc:EducationOrganization.
+3) `ug:Ssd` : descrive i settori scientifici disciplinari, sottoclasse di sc:EducationOrganization.
+
+Le altre entità che gestiscono le restanti entità sono le seguenti (sc è il prefisso di schema.org, ovvero http://www.schema.org/ e geo è il prefisso di geo w3, ovvero http://www.w3.org/2003/01/geo/wgs84_pos#):
+
+4) `sc:Person` : descrive le persone.
+5) `sc:Occupation` : descrive le occupazioni delle persone.
+6) `sc:ContactPoint` : contatti di una entità.
+7) `sc:PostalAddress` : descrive gli indirizzi dei luoghi.
+8) `sc:ImageObject` : descrive le immagini.
+9) `sc:URL` : descrive gli url.
+10) `geo:Point` : descrive i punti geolocalizzati.
+
+Ogni entità ha i suoi campi definiti e le relazioni che collegano le varie entità. In seguito vengono definite quelle relative alle entità precedentemente descritte:
+
+1) `ug:CollegeOrUniversityBuilding`
+    - sc:name : nome dell'edificio.
+    - sc:employee : persona che lavora nell'edificio.
+    - sc:address : indirizzo dell'edificio.
+    - ug:geo : coordinate georeferenziate dell'edificio.
+    - sc:department : dipartimento di appartenenza dell'edificio.
+
+2) `ug:Department`
+    - sc:legalName : nome del dipartimento.
+    - sc:branchCode : sigla del dipartimento.
+    - sc:employee : persona che lavora per il dipartimento.
+    - sc:address : indirizzo del dipartimento.
+    - sc:contactPoint : contatti del dipartimento.
+    - sc:department : edificio corrispondente al dipartimento.
+    - sc:url : url del dipartimento.
+    - ug:geo : coordinate georeferenziate del dipartimento.
+    - ug:occupationDepartment : occupazione all'interno del dipartimento.
+
+3) `ug:Ssd`
+    - sc:legalName : nome del settore scientifico disciplinare.
+    - sc:brachCode : sigla del settore scientifico disciplinare.
+    - sc:member : persona che è membro del settore scientifico disciplinare.
+
+4) `sc:Person`
+    - sc:givenName : nome della persona.
+    - sc:familyName : cognome della persona.
+    - sc:relatedTo : persona che condivide la stanza.
+    - sc:hasOccupation : occupazione della persona.
+    - sc:affiliation : edificio dove la persona è affiliata.
+    - sc:url : url del curriculum della persona.
+    - sc:contactPoint : contatti della persona.
+    - sc:image : immagine della persona.
+    - sc:worksFor : dipartimento per cui lavora la persona.
+    - sc:member : settore scientifico disciplinare dove la persona è membro.
+
+5) `sc:Occupation`
+    - sc:qualifications : qualifiche dell'occupazione.
+    - sc:responsabilities : responsabilità dell'occupazione.
+    - sc:hasOccupation : persona che si occupa dell'occupazione.
+    - ug:occupationDepartment : dipartimento che integra l'occupazione.
+
+6) `sc:ContactPoint`
+    - sc:email : email del contatto.
+    - sc:telephone : telefono del contatto.
+    - sc:faxNumber : fax del contatto.
+    - sc:contactType : tipo di contatto.
+    - sc:areaServed : nome dell'area servita dal contatto.
+    - ug:roomCode : codice della stanza.
+    - sc:contactPoint : persona o dipartimento corrispondente al contatto.
+    - sc:url : url relativo al contatto.
+
+7) `sc:PostalAddress`
+    - sc:addressLocality : città relativa all'indirizzo.
+    - sc:streetAddress : via dell'indirizzo.
+    - sc:postalCode : codice postale dell'indirizzo.
+    - sc:address : dipartimento o edificio relativo all'indirizzo.
+
+8) `sc:ImageObject`
+    - sc:caption : didascalia dell'immagine.
+    - sc:encodingFormat : formato dell'immagine (JPG, PNG, ...).
+    - sc:height : altezza dell'immagine.
+    - sc:width : larghezza dell'immagine.
+    - sc:image : persona relativa all'immagine.
+    - sc:url : url relativo all'immagine.
+
+9) `sc:URL`
+    - sc:description : descrizione dell'url.
+    - ug:link : link relativo all'url.
+    - sc:url : url relativo a una persona o a una planimetria di un contatto o ad una immagine o ad un dipartimento.
+
+10) `geo:Point`
+    - geo:lat : latitudinde del punto geolocalizzato.
+    - geo:long : longitudine del punto geolocalizzato.
+    - ug:geo : geolocalizzazione di un edificio o di un dipartimento.
+
+## Organizzazione dei files
+
+Il progetto relativo a queste note è stato composto da 4 principali cartelle contenenti dei files per aiutare allo sviluppo dell'ontologia di Unige. Nelle prossime sezioni vengono descritti i contenuti di ogni cartella.
+
+Si suppone che per ciascuno script Python vengano installate le librerie relative sulla macchina, altrimenti gli script non saranno eseguiti con successo.
+
+### Creator
+
+`Creator` è la cartella che contiene solamente lo script `create_unige_data.py`, il quale crea un file, o apre il file se già esistente, in formato turtle (`.ttl`) per inserire tutte le entità descritte precedentemente nell'ontologia. Nel caso di creazione del file per la prima volta, aggiunge tutti i prefissi e le entità create appositamente per Unige. Lo script è iterattivo, e quindi a seconda della scelta dell'utente può creare le entità o creare una relazione tra delle entità, seguendo lo schema dell'ontologia. Il file è molto semplice, quindi non merita alcuna descrizione in particolare.
+
+In particolare, un file di esempio creato da questo script è stato condiviso nella cartella `Ontology`, con il nome di `db_unige_ontology.ttl`. Lo scopo è quello di creare questo file in modo che sia il popolamento del database di Virtuoso, quindi quel file da inserire all'interno della cartella `Unige`, come descritto nella parte di [inserimento dei linked data nel database](#inserimento-dei-linked-data-nel-database).
+
+### Ontology
+
+`Ontology` è la cartella che contiene due files turtle:
+
+- `Unige_ontology.ttl`: questo file contiene tutta la descrizione delle entità e delle relazioni dell'ontologia di Unige, sottoforma di terne (soggetto, relazione, oggetto). Questo file serve solamente per dare idea della composizione dell'ontologia, ed ha questo unico utilizzo.
+
+- `db_unige_ontology.ttl`: questo file contiene un esempio di ontologia di Unige, ed è stato creato dal file `create_unige_data.py`. Può essere utilizzato per popolare il database di Virtuoso per vedere il funzionamento di tale.
+
+### Queries
+
+`Queries` è la cartella che contiene tutte le queries che vengono eseguite sui dati del database di Virtuoso. Ciascuna query replica una pagina specifica della parte di Rubrica di Unige (https://rubrica.unige.it/). Questi script devono essere integrati nella cartella creata sulla macchina virtuale dove risiede l'installazione di Virtuoso (nel caso della mia installazione, saranno da mettere in `unige_virtdb`). Ciascuna query richiama lo script `virtuoso_call_sparql.py` che eseguirà la query scritta nella variabile `query`, dopo aver definito l'array dei campi da selezionare nelle variabile `select`. Buona parte delle query prendono in input un argomento, che è definito nell'help dello script (utilizzando l'opzione `-h`), e lo utilizzano nell query per filtrare.
+
+In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno di Virtuoso.
+
+- `query_1_buildings.py`: restituisce tutti gli edifici con indirizzo e coordinate georeferenziate. Richiama la seguente query.
+  ```
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX ug: <http://www.unige.it/2022/01/>
+  PREFIX sc: <http://www.schema.org/>
+  PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+  
+  SELECT DISTINCT ?edificio ?nome ?indirizzo
+  WHERE
+  {
+	?edificio rdf:type ug:CollegeOrUniversityBuilding .
+	?edificio sc:name ?nome .
+	OPTIONAL
+    {
+      ?edificio sc:address ?luogo .
+	  ?luogo sc:streetAddress ?via .
+	  ?luogo sc:postalCode ?cap .
+	  BIND(CONCAT(?via, ", ", ?cap) AS ?indirizzo) .
+    }
+  }
+  ```
+
+- `query_2_person_building.py`: restituisce tutte le persone che lavorano nell'edificio e parte dei suoi dati. In input lo script prende come argomento `-n` | `--name` `<nome_edificio>` per filtrare i risultati. Richiama la seguente query.
+  ```
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX ug: <http://www.unige.it/2022/01/>
+  PREFIX sc: <http://www.schema.org/>
+  PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+
+  SELECT DISTINCT ?edificio ?nome_persona ?cognome_persona ?qualifica ?nome_dipartimento ?nome_edificio ?indirizzo ?coordinate_maps
+  WHERE
+  {
+	?edificio rdf:type ug:CollegeOrUniversityBuilding .
+	?edificio sc:name ?nome_edificio .
+	?edificio sc:employee ?persona .
+	?persona sc:givenName ?nome_persona .
+	?persona sc:familyName ?cognome_persona .
+	?persona sc:hasOccupation ?occupazione .
+	?occupazione sc:qualifications ?qualifica .
+	?persona sc:worksFor ?dipartimento .
+    ?dipartimento sc:name ?sigla_dipartimento .
+	?dipartimento sc:legalName ?nome_legale_dipartimento .
+    BIND(CONCAT(?nome_legale_dipartimento, " - ", ?sigla_dipartimento) AS ?nome_dipartimento) .
+	?edificio sc:address ?luogo .
+	?luogo sc:streetAddress ?via .
+	?luogo sc:postalCode ?cap .
+	BIND(CONCAT(?via, ", ", ?cap) AS ?indirizzo) .
+    ?edificio ug:geo ?coordinate .
+	?coordinate geo:lat ?lat .
+	?coordinate geo:long ?long .
+	BIND(CONCAT("https://google.com/maps?q=", STR(?lat), ",", STR(?long)) AS ?coordinate_maps) .
+	FILTER (?nome_edificio = "<nome_edificio>")
+  }
+  ORDER BY ?cognome_persona
+  ```
+
+- `query_2_person_building_2.py`: restituisce tutte le persone che lavorano nell'edificio e parte dei suoi dati. In input lo script prende come argomento `-n` | `--name` `<nome_edificio>` per filtrare i risultati. Richiama la seguente query.
+  ```
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX ug: <http://www.unige.it/2022/01/>
+  PREFIX sc: <http://www.schema.org/>
+
+  SELECT DISTINCT ?edificio ?nome_persona ?cognome_persona ?ssd ?nome_edificio ?url_planimetria ?stanza ?telefono ?email
+  WHERE
+  {
+	?edificio rdf:type ug:CollegeOrUniversityBuilding .
+	?edificio sc:name ?nome_edificio .
+	?edificio sc:employee ?persona .
+	?persona sc:givenName ?nome_persona .
+	?persona sc:familyName ?cognome_persona .
+    OPTIONAL
+    {
+      ?persona sc:member ?settore .
+      ?settore sc:legalName ?ssd_nome .
+      ?settore sc:branchCode ?ssd_codice .
+      BIND(CONCAT(?ssd_nome, " - ", ?ssd_codice) AS ?ssd) .
+    }
+	?persona sc:contactPoint ?contatto .
+	?contatto sc:telephone ?telefono .
+	OPTIONAL { ?contatto sc:email ?email } .
+	OPTIONAL { ?contatto ug:roomCode ?stanza } .
+	?contatto sc:areaServed ?area .
+	?contatto sc:url ?url_planimetria .
+	?url_planimetria ug:link ?planimetria .
+	FILTER (?nome_edificio = "<nome_edificio>" && ?area = "<nome_edificio>")
+  }
+  ORDER BY ?cognome_persona
+  ```
+
+- `query_3_person_details.py`: Restituisce i dettagli di una persona. In input lo script prende come argomento `-n` | `--name` `<nome_persona>` `<cognome_persona>` per filtrare i risultati. Richiama la seguente query.
+  ```
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX ug: <http://www.unige.it/2022/01/>
+  PREFIX sc: <http://www.schema.org/>
+
+  SELECT DISTINCT ?persona ?nome ?cognome ?link_immagine ?telefono ?email ?ruolo ?nome_ssd ?nome_dipartimento ?link_cv
+  WHERE
+  {
+	?persona rdf:type sc:Person .
+    ?persona sc:givenName ?nome .
+    ?persona sc:familyName ?cognome .
+	?persona sc:image ?immagine .
+	?immagine sc:url ?url_immagine .
+	?url_immagine ug:link ?link_immagine .
+	?persona sc:contactPoint ?contatto .
+	?contatto sc:telephone ?telefono .
+	?contatto sc:email ?email .
+	?persona sc:hasOccupation ?occupazione .
+	?occupazione sc:qualifications ?ruolo .
+    ?persona sc:member ?ssd .
+    ?ssd sc:legalName ?ssd_nome_legale .
+    ?ssd sc:branchCode ?ssd_sigla .
+    BIND(CONCAT(?ssd_sigla, " - ", ?ssd_nome_legale) AS ?nome_ssd) .
+	?persona sc:worksFor ?dipartimento .
+	?dipartimento sc:name ?sigla_dipartimento .
+	?dipartimento sc:legalName ?nome_legale_dipartimento .
+    BIND(CONCAT(?nome_legale_dipartimento, " - ", ?sigla_dipartimento) AS ?nome_dipartimento) .
+    ?persona sc:url ?url .
+    ?url ug:link ?link_cv .
+	FILTER (?nome = "<nome_persona>" && ?cognome = "<cognome_persona>")
+  }
+  ```
+
+- `query_4_departments.py`: Restituisce tutti i dipartimenti con il numero di persone afferenti. Richiama la seguente query.
+  ```
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX ug: <http://www.unige.it/2022/01/>
+  PREFIX sc: <http://www.schema.org/>
+
+  SELECT DISTINCT ?dipartimento ?nome (count(distinct ?persona) as ?numero_afferenti)
+  WHERE
+  {
+	?dipartimento rdf:type ug:Department .
+	?dipartimento sc:name ?sigla .
+	?dipartimento sc:legalName ?nome_legale .
+    BIND(CONCAT(?nome_legale, " - ", ?sigla) AS ?nome) .
+	?dipartimento sc:employee ?persona .
+  }
+  GROUP BY ?dipartimento ?nome
+  ```
+
+- `query_5_department_contacts.py`: Restituisce i contatti di un dipartimento. In input lo script prende come argomento `-c` | `--code` `<codice_dipartimento>` per filtrare i risultati. Richiama la seguente query.
+  ```
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX ug: <http://www.unige.it/2022/01/>
+  PREFIX sc: <http://www.schema.org/>
+  PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+
+  SELECT DISTINCT ?dipartimento ?nome ?tipo_contatto ?dettaglio_contatto ?altro_dato
+  WHERE
+  {
+	?dipartimento rdf:type ug:Department .
+	?dipartimento sc:name ?sigla .
+	?dipartimento sc:legalName ?nome_legale .
+    BIND(CONCAT(?nome_legale, " - ", ?sigla) AS ?nome) .
+	{
+      ?dipartimento sc:address ?luogo .
+      BIND("Indirizzo" AS ?tipo_contatto) .
+      ?luogo sc:streetAddress ?via .
+	  ?luogo sc:postalCode ?cap .
+      ?luogo sc:addressLocality ?citta .
+	  BIND(CONCAT(?via, ", ", ?cap, ", ", ?citta) AS ?dettaglio_contatto) .
+      ?dipartimento ug:geo ?coordinate .
+	  ?coordinate geo:lat ?lat .
+	  ?coordinate geo:long ?long .
+	  BIND(CONCAT("https://google.com/maps?q=", STR(?lat), ",", STR(?long)) AS ?altro_dato) .
+    } UNION
+    {
+      ?dipartimento sc:contactPoint ?contatto .
+      ?contatto sc:contactType ?tipo_contatto .
+      ?contatto sc:telephone ?dettaglio_contatto .
+      BIND("" AS ?altro_dato) .
+    } UNION
+    {
+      ?dipartimento sc:contactPoint ?contatto .
+      ?contatto sc:contactType ?tipo_contatto .
+      ?contatto sc:fax ?dettaglio_contatto .
+      BIND("" AS ?altro_dato) .
+    } UNION
+    {
+      ?dipartimento sc:contactPoint ?contatto .
+      ?contatto sc:contactType ?tipo_contatto .
+      ?contatto sc:email ?dettaglio_contatto .
+      BIND("" AS ?altro_dato) .
+    } UNION
+    {
+      ?dipartimento sc:contactPoint ?contatto .
+      ?contatto sc:contactType ?tipo_contatto .
+      ?contatto sc:telephone ?dettaglio_contatto .
+      BIND("" AS ?altro_dato) .
+    } UNION
+    {
+      ?dipartimento sc:url ?contatto .
+      ?contatto sc:description ?tipo_contatto .
+      ?contatto ug:link ?dettaglio_contatto .
+      BIND("" AS ?altro_dato) .
+    }
+	FILTER (?sigla = "<codice_dipartimento>")
+  }
+  ```
+
+- `query_6_departiments_occupations.py`: Restituisce tutte le persone che ricoprono una occupazione nel dipartimento. In input lo script prende come argomento `-c` | `--code` `<codice_dipartimento>` per filtrare i risultati. Richiama la seguente query.
+  ```
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX ug: <http://www.unige.it/2022/01/>
+  PREFIX sc: <http://www.schema.org/>
+
+  SELECT DISTINCT ?dipartimento ?nome_dipartimento ?responsabilita ?persona ?nome_persona
+  WHERE
+  {
+    ?dipartimento rdf:type ug:Department .
+    ?dipartimento sc:name ?sigla .
+    ?dipartimento sc:legalName ?nome_legale .
+    BIND(CONCAT(?nome_legale, " - ", ?sigla) AS ?nome_dipartimento) .
+    ?dipartimento ug:occupationDepartment ?occupazione .
+    ?occupazione sc:responsabilities ?responsabilita .
+    ?occupazione sc:hasOccupation ?persona .
+    ?persona sc:givenName ?nome .
+    ?persona sc:familyName ?cognome .
+    BIND(CONCAT(?nome, " ", ?cognome) AS ?nome_persona) .
+	FILTER (?sigla = "<codice_dipartimento>")
+  }
+  ```
+
+- `query_7_department_staff.py`: Restituisce tutto il personale del dipartimento e i loro dati. In input lo script prende come argomento `-c` | `--code` `<codice_dipartimento>` per filtrare i risultati. Richiama la seguente query.
+  ```
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX ug: <http://www.unige.it/2022/01/>
+  PREFIX sc: <http://www.schema.org/>
+
+  SELECT DISTINCT ?dipartimento ?nome ?qualifica ?afferenza (group_concat(?dato_contatto, '; ') as ?contatti)
+  WHERE
+  {
+    ?dipartimento rdf:type ug:Department .
+    ?dipartimento sc:name ?sigla .
+    ?dipartimento sc:legalName ?nome_legale .
+    BIND(CONCAT(?nome_legale, " - ", ?sigla) AS ?afferenza) .
+    ?dipartimento sc:employee ?persona .
+    ?persona sc:givenName ?nome_persona .
+    ?persona sc:familyName ?cognome_persona .
+    BIND(CONCAT(?nome_persona, " ", ?cognome_persona) AS ?nome) .
+    ?persona sc:hasOccupation ?occupazione .
+    ?occupazione sc:qualifications ?qualifica .
+    ?occupazione sc:hasOccupation ?persona .
+    ?persona sc:contactPoint ?contatto .
+    {
+      ?contatto sc:telephone ?valore_contatto .
+      ?contatto sc:contactType ?tipo_contatto .
+      BIND(CONCAT(?valore_contatto, " ", ?tipo_contatto) AS ?dato_contatto) .
+    } UNION
+    {
+      ?contatto sc:email ?valore_contatto .
+      ?contatto sc:contactType ?tipo_contatto .
+      BIND(CONCAT(?valore_contatto, " ", ?tipo_contatto) AS ?dato_contatto) .
+    }
+	FILTER (?sigla = "<codice_dipartimento>")
+  }
+  GROUP BY ?dipartimento ?nome ?qualifica ?afferenza
+  ```
+
+- `query_8_ssds.py`: Restituisce tutti i settori scientifici disciplinari con nome e sigla. Richiama la seguente query.
+  ```
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX ug: <http://www.unige.it/2022/01/>
+  PREFIX sc: <http://www.schema.org/>
+
+  SELECT DISTINCT ?ssd ?sigla ?nome
+  WHERE
+  {
+    ?ssd rdf:type ug:Ssd .
+    ?ssd sc:branchCode ?sigla .
+    ?ssd sc:legalName ?nome .
+  }
+  ```
+
+- `query_9_ssd_persons.py`: Restituisce tutte le persone affiliate al settore scientifico disciplinare. In input lo script prende come argomento `-c` | `--code` `<codice_ssd>` per filtrare i risultati. Richiama la seguente query.
+  ```
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX ug: <http://www.unige.it/2022/01/>
+  PREFIX sc: <http://www.schema.org/>
+
+  SELECT DISTINCT ?ssd ?nome ?afferenza ?telefono ?email
+  WHERE
+  {
+    ?ssd rdf:type ug:Ssd .
+    ?ssd sc:branchCode ?codice_ssd .
+    ?ssd sc:member ?persona .
+    ?persona sc:givenName ?nome_persona .
+    ?persona sc:familyName ?cognome_persona .
+    BIND(CONCAT(?nome_persona, " ", ?cognome_persona) AS ?nome) .
+    ?persona sc:worksFor ?dipartimento .
+    ?dipartimento sc:name ?sigla_dipartimento .
+    ?dipartimento sc:legalName ?nome_dipartimento .
+    BIND(CONCAT(?nome_dipartimento, " - ", ?sigla_dipartimento) AS ?afferenza) .
+    ?persona sc:contactPoint ?contatto .
+    OPTIONAL { ?contatto sc:telephone ?telefono } .
+    OPTIONAL { ?contatto sc:email ?email } .
+    FILTER (?codice_ssd = "<codice_ssd>")
+  }
+  ORDER BY ?cognome_persona
+  ```
+
+### Virtuoso
+
+`Virtuoso` è la cartella che contiene gli script utili a Virtuoso. Questi script devono essere integrati nella cartella creata sulla macchina virtuale dove risiede l'installazione di Virtuoso (nel caso della mia installazione, saranno da mettere in `unige_virtdb`). Questa cartella possiede due script:
+
+- `virtuoso_call_sparql.py`: questo file è quello che viene richiamato da tutte le queries (infatti è importante che risieda nella stessa cartella degli script delle queries) al fine di creare un wrapper dell'endpoint SPARQL che si trova in Virtuoso, per poter richiamare le queries. Come si può notare nel file viene creato un SPARQLWrapper che comunicherà all'indirizzo dell'endpoint SPARQL, che nel mio caso sarà `http://localhost:8890/sparql`, a seconda della configurazione fatta inizialmente se non si è seguito passo per passo quello descritto precedentemente, di dovrà sostituire questa URL con quella esatta. Dopo aver fatto questo, prende la query creata dagli scripts precedenti e fa ritornare il risultato in un file turtle (`.ttl`) che verrà creato in una repository chiamata `Result_yyyy_MM_dd` dove `yyyy` sta per l'anno, `MM` sta per il mese e `dd` sta per il giorno in cui è stata eseguita la query; il file turtle salvato all'interno avrà come nome `<script eseguito>_yyyy_MM_dd_hh_mm_ss` dove `yyyy` sta per l'anno, `MM` sta per il mese, `dd` sta per il giorno, `hh` sta per le ore, `mm` sta per i minuti e `ss` sta per i secondi in cui il file è stato creato. Questo file conterrà il risultato della query eseguita e allo stesso tempo verrà stampato l'output anche su console.
+
+- `virtuoso_clear_old_results`: un file molto semplice che prendendo come opzione `-d` | `--days` `<numero_giorni>`, cancellerà tutte le cartelle `Result` che vanno da quel numero di giorni a prima.

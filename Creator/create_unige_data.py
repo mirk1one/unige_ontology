@@ -222,7 +222,7 @@ def create_dipartimento(file):
     file.write(f"# Definizione del dipartimento {subj}\n")
     file.write(f"{subj} rdf:type ug:Department .\n")
     sigla = input("Inserisci la sigla del dipartimento: ")
-    file.write(f"{subj} sc:name \"{sigla}\" .\n")
+    file.write(f"{subj} sc:branchCode \"{sigla}\" .\n")
     name = input("Inserisci il nome legale del dipartimento: ")
     file.write(f"{subj} sc:legalName \"{name}\" .\n")
     create = input("Vuoi creare l'oggetto indirizzo del dipartimento (y/n): ")

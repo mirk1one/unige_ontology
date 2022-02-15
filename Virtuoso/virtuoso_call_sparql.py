@@ -1,12 +1,7 @@
 from SPARQLWrapper import SPARQLWrapper, TURTLE
-from rdflib import Graph
 from datetime import datetime
 import os
 import time
-
-from rdflib.extras.external_graph_libs import rdflib_to_networkx_multidigraph
-import networkx as nx
-import matplotlib.pyplot as plt
 
 def call_local_sparql(query, select, scriptName):
   start_time = time.time()

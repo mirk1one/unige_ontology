@@ -1,7 +1,13 @@
+import argparse
 from virtuoso_call_sparql import call_local_sparql
 
-print("Data la sigla di un dipartimento, restituisce tutte le persone che ricoprono dei ruoli inerenti\n")
-dipartimento = input("Inserire la sigla del dipartimento: ")
+parser = argparse.ArgumentParser(description = "Parser per query")
+parser.add_argument("-c", "--code", help = "Sigla del dipartimento", required = True)
+
+argument = parser.parse_args()
+dipartimento = argument.code
+
+print(f"\nData la sigla del dipartimento {dipartimento}, restituisce tutte le persone che ricoprono dei ruoli inerenti\n")
 
 select = ["dipartimento", "nome_dipartimento", "responsabilita", "persona", "nome_persona"]
 
