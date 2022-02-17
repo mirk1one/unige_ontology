@@ -11,8 +11,6 @@ cognome = persona[1]
 
 print(f"\nData la persona {nome} {cognome}, restituisce tutti i suoi dati\n")
 
-select = ["persona", "nome", "cognome", "link_immagine", "telefono", "email", "ruolo", "nome_ssd" "nome_dipartimento", "link_cv"]
-
 query = """PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX ug: <http://www.unige.it/2022/01/>
 PREFIX sc: <http://www.schema.org/>
@@ -44,4 +42,4 @@ WHERE
 	FILTER (?nome = \"""" + nome + """\" && ?cognome = \"""" + cognome + """\")
 }"""
     
-call_local_sparql(query, select, "query_3_person_detail")
+call_local_sparql(query, "query_3_person_detail")

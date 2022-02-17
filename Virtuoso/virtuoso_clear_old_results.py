@@ -7,7 +7,7 @@ parser = argparse.ArgumentParser(description = "Parser per query")
 parser.add_argument("-d", "--days", help = "Numero dei giorni", required = True)
 
 argument = parser.parse_args()
-days = argument.days
+days = int(argument.days)
 
 print(f"\nIl numero di giorni oltre il quale le cartelle verranno rimosse è di {days} giorni\n")
 path = "./"
@@ -21,3 +21,5 @@ for root, dirs, files in os.walk(path, topdown=False):
                 shutil.rmtree(_dir)
             except OSError as e:
                 print("Errore: %s - %s." % (e.filename, e.strerror))
+                
+print(f"Operazione completata\n")

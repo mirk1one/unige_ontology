@@ -3,7 +3,7 @@ from datetime import datetime
 import os
 import time
 
-def call_local_sparql(query, select, scriptName):
+def call_local_sparql(query, scriptName):
   start_time = time.time()
   
   sparql = SPARQLWrapper('http://localhost:8890/sparql')

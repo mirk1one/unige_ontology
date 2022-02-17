@@ -9,8 +9,6 @@ dipartimento = argument.code
 
 print(f"\nData la sigla del dipartimento {dipartimento}, restituisce tutti i suoi contatti\n")
 
-select = ["dipartimento", "nome", "tipo_contatto", "dettaglio_contatto", "altro_dato"]
-
 query = """PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX ug: <http://www.unige.it/2022/01/>
 PREFIX sc: <http://www.schema.org/>
@@ -68,4 +66,4 @@ WHERE
 	FILTER (?sigla = \"""" + dipartimento + """\")
 }"""
     
-call_local_sparql(query, select, "query_5_department_contacts")
+call_local_sparql(query, "query_5_department_contacts")

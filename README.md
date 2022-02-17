@@ -12,6 +12,7 @@
 * [Utilizzo di Virtuoso](#utilizzo-di-virtuoso)
     * [Configurazione del database](#configurazione-del-database)
     * [Inserimento dei linked data nel database](#inserimento-dei-linked-data-nel-database)
+* [Installazione di Python](#installazione-di-python)
 * [Ontologia di Unige](#ontologia-di-unige)
 * [Organizzazione dei files](#organizzazione-dei-files)
     * [Creator](#creator)
@@ -367,6 +368,86 @@ Non variando gli altri parametri e cliccando sul pulsante `Execute Query`, ci ve
 
 Con questo risultato, è stato verificato effettivamente che tutti i passaggi fatti precedentemente sono andati a buon fine.
 
+## Installazione di Python
+
+Per eseguire gli scripts sulla macchina virtuale è stato installato `Python 3.8`. Nei passaggi successivi vengono descritti tutti i passi da effettuare su una macchina Linux Ubuntu non contenente Python e quindi installandolo da zero.
+
+L'installazione su Ubuntu è molto semplice e impiega pochi minuti utilizzando `Apt`.
+
+Inizialmente eseguiamo i seguenti comandi come root o come normale utente utilizzando `sudo` per aggiornare la lista dei pacchetti:
+
+```sh
+$ sudo apt update
+```
+
+In seguito installiamo tutti i prerequisiti:
+
+```sh
+$ sudo apt install software-properties-common
+```
+
+Aggiungi il Deadsnakes PPA all'elenco dei sorgenti del sistema:
+
+```sh
+$ sudo add-apt-repository ppa:deadsnakes/ppa
+```
+
+e infine si preme `Enter` quando ha terminato per continuare.
+Una volta che il repository è stato abilitato, si installa `Python 3.8` con:
+
+```sh
+$ sudo apt install python3.8
+```
+
+Si verifica che l'installazione sia andata a buon fine digitando il seguente comando:
+
+```sh
+$ python3.8 --version
+```
+
+A questo punto `Python 3.8` è stato installato sul sistema Ubuntu.
+Successivamente si deve installare `pip3`, l'ufficiale pacchetto di installazione per `Python 3`. Per farlo come prima cosa aggiorniamo il sistema come fatto inizialmente:
+
+```sh
+$ sudo apt update
+```
+
+Avendo già installata una versione di `Python 3` sulla macchina, possiamo installare `pip3`:
+
+```sh
+$ sudo apt-get -y install python3-pip
+```
+
+Si verifica che il pacchetto sia stato installato utilizzando il seguente comando:
+
+```sh
+$ pip3 --version
+```
+
+Ora che l'ambiente Python è pronto, possiamo installare tutte le librerie che ci servono.
+Le libreria non fornite all'interno di Python 3.8 da installare, dovranno tutte seguire i passaggi descritti successivamente. Quindi supponiamo che il pacchetto da installare sia `<python-package>`.
+
+Per installare un pacchetto come primo passaggio, come sempre, si aggiorna il sistema:
+
+```sh
+$ sudo apt update
+```
+
+Così ora si può installare la libreria :
+
+```sh
+$ sudo apt install <python-package>
+```
+
+Quindi il pacchetto è stato installato sulla macchina virtuale.
+Seguiremo i passaggi descritti precedentemente per i seguenti pacchetti:
+
+- `python-argparse`.
+- `pytest-shutil`.
+- `python3-sparqlwrapper`.
+
+A questo punto il nostro ambiente è pronto per eseguire tutti gli scripts.
+
 ## Ontologia di Unige
 
 Ora passiamo a parlare della struttura dell'ontologia di Unige. Per costruire l'ontologia mi sono basato su [schema.org](https://schema.org) per la definizione delle entità e delle loro relazione, per le entità di geolocalizzazione ho utilizzato il vocabolario [geo di w3](https://www.w3.org/2003/01/geo/), invece per quanto riguarda gli elementi di nostra creazione si utilizza il namespace di [Unige](http://www.unige.it/2022/01/).
@@ -385,11 +466,12 @@ Le altre entità che gestiscono le restanti entità sono le seguenti (sc è il p
 
 4) `sc:Person` : descrive le persone.
 5) `sc:Occupation` : descrive le occupazioni delle persone.
-6) `sc:ContactPoint` : contatti di una entità.
-7) `sc:PostalAddress` : descrive gli indirizzi dei luoghi.
-8) `sc:ImageObject` : descrive le immagini.
-9) `sc:URL` : descrive gli url.
-10) `geo:Point` : descrive i punti geolocalizzati.
+6) `sc:Role` : descrive gli incarichi delle persone nei dipartimenti.
+7) `sc:ContactPoint` : contatti di una entità.
+8) `sc:PostalAddress` : descrive gli indirizzi dei luoghi.
+9) `sc:ImageObject` : descrive le immagini.
+10) `sc:URL` : descrive gli url.
+11) `geo:Point` : descrive i punti geolocalizzati.
 
 Ogni entità ha i suoi campi definiti e le relazioni che collegano le varie entità. In seguito vengono definite quelle relative alle entità precedentemente descritte:
 
@@ -409,7 +491,6 @@ Ogni entità ha i suoi campi definiti e le relazioni che collegano le varie enti
     - sc:department : edificio corrispondente al dipartimento.
     - sc:url : url del dipartimento.
     - ug:geo : coordinate georeferenziate del dipartimento.
-    - ug:occupationDepartment : occupazione all'interno del dipartimento.
 
 3) `ug:Ssd`
     - sc:legalName : nome del settore scientifico disciplinare.
@@ -427,12 +508,17 @@ Ogni entità ha i suoi campi definiti e le relazioni che collegano le varie enti
     - sc:image : immagine della persona.
     - sc:worksFor : dipartimento per cui lavora la persona.
     - sc:member : settore scientifico disciplinare dove la persona è membro.
+    - ug:assignment : incarico della persona all'interno del suo dipartimento.
 
 5) `sc:Occupation`
     - sc:qualifications : qualifiche dell'occupazione.
     - sc:responsabilities : responsabilità dell'occupazione.
     - sc:hasOccupation : persona che si occupa dell'occupazione.
     - ug:occupationDepartment : dipartimento che integra l'occupazione.
+
+6) `sc:Role`
+  - sc:roleName : nome dell'incarico.
+  - ug:assignment : incarico della persona all'interno del suo dipartimento.
 
 6) `sc:ContactPoint`
     - sc:email : email del contatto.
@@ -490,7 +576,7 @@ In particolare, un file di esempio creato da questo script è stato condiviso ne
 
 ### Queries
 
-`Queries` è la cartella che contiene tutte le queries che vengono eseguite sui dati del database di Virtuoso. Ciascuna query replica una pagina specifica della parte di Rubrica di Unige (https://rubrica.unige.it/). Questi script devono essere integrati nella cartella creata sulla macchina virtuale dove risiede l'installazione di Virtuoso (nel caso della mia installazione, saranno da mettere in `unige_virtdb`). Ciascuna query richiama lo script `virtuoso_call_sparql.py` che eseguirà la query scritta nella variabile `query`, dopo aver definito l'array dei campi da selezionare nelle variabile `select`. Buona parte delle query prendono in input un argomento, che è definito nell'help dello script (utilizzando l'opzione `-h`), e lo utilizzano nell query per filtrare.
+`Queries` è la cartella che contiene tutte le queries che vengono eseguite sui dati del database di Virtuoso. Ciascuna query replica una pagina specifica della parte di Rubrica di Unige (https://rubrica.unige.it/). Questi script devono essere integrati nella cartella creata sulla macchina virtuale dove risiede l'installazione di Virtuoso (nel caso della mia installazione, saranno da mettere in `unige_virtdb`). Ciascuna query richiama lo script `virtuoso_call_sparql.py` che eseguirà la query scritta nella variabile `query`. Buona parte delle query prendono in input un argomento, che è definito nell'help dello script (utilizzando l'opzione `-h`), e lo utilizzano per filtrare.
 
 In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno di Virtuoso.
 
@@ -708,13 +794,13 @@ In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno 
     ?dipartimento sc:name ?sigla .
     ?dipartimento sc:legalName ?nome_legale .
     BIND(CONCAT(?nome_legale, " - ", ?sigla) AS ?nome_dipartimento) .
-    ?dipartimento ug:occupationDepartment ?occupazione .
-    ?occupazione sc:responsabilities ?responsabilita .
-    ?occupazione sc:hasOccupation ?persona .
+    ?dipartimento sc:employee ?persona .
     ?persona sc:givenName ?nome .
     ?persona sc:familyName ?cognome .
     BIND(CONCAT(?nome, " ", ?cognome) AS ?nome_persona) .
-	FILTER (?sigla = "<codice_dipartimento>")
+    ?persona ug:assignment ?ruolo .
+    ?ruolo sc:roleName ?responsabilita .
+    FILTER (?sigla = "<codice_dipartimento>")
   }
   ```
 
@@ -724,7 +810,7 @@ In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno 
   PREFIX ug: <http://www.unige.it/2022/01/>
   PREFIX sc: <http://www.schema.org/>
 
-  SELECT DISTINCT ?dipartimento ?nome ?qualifica ?afferenza (group_concat(?dato_contatto, '; ') as ?contatti)
+  SELECT DISTINCT ?dipartimento ?nome ?qualifica ?afferenza (group_concat(DISTINCT ?dato_contatto, "; ") as ?contatti)
   WHERE
   {
     ?dipartimento rdf:type ug:Department .
@@ -737,19 +823,31 @@ In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno 
     BIND(CONCAT(?nome_persona, " ", ?cognome_persona) AS ?nome) .
     ?persona sc:hasOccupation ?occupazione .
     ?occupazione sc:qualifications ?qualifica .
-    ?occupazione sc:hasOccupation ?persona .
-    ?persona sc:contactPoint ?contatto .
     {
-      ?contatto sc:telephone ?valore_contatto .
-      ?contatto sc:contactType ?tipo_contatto .
-      BIND(CONCAT(?valore_contatto, " ", ?tipo_contatto) AS ?dato_contatto) .
+      SELECT ?dato_contatto
+      WHERE
+      {
+        ?p sc:givenName ?nome_persona .
+        ?p sc:familyName ?cognome_persona .
+        ?p sc:contactPoint ?c .
+        ?c sc:telephone ?v .
+        ?c sc:contactType ?t .
+        BIND(CONCAT(?v, " ", ?t) AS ?dato_contatto) .
+      }
     } UNION
     {
-      ?contatto sc:email ?valore_contatto .
-      ?contatto sc:contactType ?tipo_contatto .
-      BIND(CONCAT(?valore_contatto, " ", ?tipo_contatto) AS ?dato_contatto) .
+      SELECT ?dato_contatto
+      WHERE
+      {
+        ?p sc:givenName ?nome_persona .
+        ?p sc:familyName ?cognome_persona .
+        ?p sc:contactPoint ?c .
+        ?c sc:email ?v .
+        ?c sc:contactType ?t .
+        BIND(CONCAT(?v, " ", ?t) AS ?dato_contatto) .
+      }
     }
-	FILTER (?sigla = "<codice_dipartimento>")
+	  FILTER (?sigla = "<codice_dipartimento>")
   }
   GROUP BY ?dipartimento ?nome ?qualifica ?afferenza
   ```
@@ -775,7 +873,7 @@ In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno 
   PREFIX ug: <http://www.unige.it/2022/01/>
   PREFIX sc: <http://www.schema.org/>
 
-  SELECT DISTINCT ?ssd ?nome ?afferenza ?telefono ?email
+  SELECT DISTINCT ?ssd ?nome ?afferenza (group_concat(DISTINCT ?dato_contatto, "; ") as ?contatti)
   WHERE
   {
     ?ssd rdf:type ug:Ssd .
@@ -788,12 +886,33 @@ In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno 
     ?dipartimento sc:name ?sigla_dipartimento .
     ?dipartimento sc:legalName ?nome_dipartimento .
     BIND(CONCAT(?nome_dipartimento, " - ", ?sigla_dipartimento) AS ?afferenza) .
-    ?persona sc:contactPoint ?contatto .
-    OPTIONAL { ?contatto sc:telephone ?telefono } .
-    OPTIONAL { ?contatto sc:email ?email } .
+    {
+      SELECT ?dato_contatto
+      WHERE
+      {
+        ?p sc:givenName ?nome_persona .
+        ?p sc:familyName ?cognome_persona .
+        ?p sc:contactPoint ?c .
+        ?c sc:telephone ?v .
+        ?c sc:contactType ?t .
+        BIND(CONCAT(?v, " ", ?t) AS ?dato_contatto) .
+      }
+    } UNION
+    {
+      SELECT ?dato_contatto
+      WHERE
+      {
+        ?p sc:givenName ?nome_persona .
+        ?p sc:familyName ?cognome_persona .
+        ?p sc:contactPoint ?c .
+        ?c sc:email ?v .
+        ?c sc:contactType ?t .
+        BIND(CONCAT(?v, " ", ?t) AS ?dato_contatto) .
+      }
+    }
     FILTER (?codice_ssd = "<codice_ssd>")
   }
-  ORDER BY ?cognome_persona
+  GROUP BY ?ssd ?nome ?afferenza
   ```
 
 ### Virtuoso

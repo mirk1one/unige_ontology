@@ -40,13 +40,14 @@ def create_ontology(name):
 
 def create_edificio(file):
     subj = input("Inserisci il soggetto all'edificio: ")
-    file.write(f"# Definizione dell'edificio {subj}\n")
+    file.write(f"\n# Definizione dell'edificio {subj}\n")
     file.write(f"{subj} rdf:type ug:CollegeOrUniversityBuilding .\n")
     name = input("Inserisci il nome dell'edificio: ")
     file.write(f"{subj} sc:name \"{name}\" .\n")
     create = input("Vuoi creare l'oggetto indirizzo relativo (y/n): ")
     if create == 'y':
         obj = create_indirizzo(file)
+        file.write(f"\n# Assegnazione dell'edificio {subj} all'indirizzo {obj}\n")
         file.write(f"{subj} sc:address {obj} .\n")
         file.write(f"{obj} sc:address {subj} .\n")
     else:
@@ -56,6 +57,7 @@ def create_edificio(file):
     create = input("Vuoi creare le coordinate dell'edificio (y/n): ")
     if create == 'y':
         obj = create_coordinata_geo(file)
+        file.write(f"\n# Assegnazione dell'edificio {subj} alle coordinate geo {obj}\n")
         file.write(f"{subj} ug:geo {obj} .\n")
         file.write(f"{obj} ug:geo {subj} .\n")
     else:
@@ -65,6 +67,7 @@ def create_edificio(file):
     create = input("Vuoi creare il dipartimento relativo all'edificio (y/n): ")
     if create == 'y':
         obj = create_dipartimento(file)
+        file.write(f"\n# Assegnazione del dipartimento {subj} all'indirizzo {obj}\n")
         file.write(f"{subj} sc:department {obj} .\n")
         file.write(f"{obj} sc:department {subj} .\n")
     else:
@@ -76,7 +79,7 @@ def create_edificio(file):
 
 def create_indirizzo(file):
     subj = input("Inserisci il soggetto all'indirizzo: ")
-    file.write(f"# Definizione dell'indirizzo {subj}\n")
+    file.write(f"\n# Definizione dell'indirizzo {subj}\n")
     file.write(f"{subj} rdf:type ug:PostalAddress .\n")
     location = input("Inserisci la località dell'indirizzo: ")
     file.write(f"{subj} sc:addressLocality \"{location}\" .\n")
@@ -89,7 +92,7 @@ def create_indirizzo(file):
 
 def create_persona(file):
     subj = input("Inserisci il soggetto alla persona: ")
-    file.write(f"# Definizione della persona {subj}\n")
+    file.write(f"\n# Definizione della persona {subj}\n")
     file.write(f"{subj} rdf:type sc:Person .\n")
     name = input("Inserisci il nome della persona: ")
     file.write(f"{subj} sc:name \"{name}\" .\n")
@@ -98,6 +101,7 @@ def create_persona(file):
     create = input("Vuoi creare l'oggetto dell'occupazione della persona (y/n): ")
     if create == 'y':
         obj = create_occupazione(file)
+        file.write(f"\n# Assegnazione della persona {subj} all'occupazione {obj}\n")
         file.write(f"{subj} sc:hasOccupation {obj} .\n")
         file.write(f"{obj} sc:hasOccupation {subj} .\n")
     else:
@@ -107,6 +111,7 @@ def create_persona(file):
     create = input("Vuoi creare l'oggetto edificio affiliato alla persona (y/n): ")
     if create == 'y':
         obj = create_edificio(file)
+        file.write(f"\n# Assegnazione della persona {subj} all'edificio {obj}\n")
         file.write(f"{subj} sc:employee {obj} .\n")
         file.write(f"{obj} sc:affiliation {subj} .\n")
     else:
@@ -116,19 +121,31 @@ def create_persona(file):
     create = input("Vuoi creare il dipartimento dove lavora la persona (y/n): ")
     if create == 'y':
         obj = create_dipartimento(file)
+        file.write(f"\n# Assegnazione della persona {subj} al dipartimento {obj}\n")
         file.write(f"{subj} sc:employee {obj} .\n")
         file.write(f"{obj} sc:worksFor {subj} .\n")
     else:
         assign = input("Vuoi assegnare la persona che lavora ad un dipartimento esistente (y/n): ")
         if assign == 'y':
             assign_persona_dipartimento(file, subj, '')
+    create = input("Vuoi creare l'oggetto incarico della persona nel dipartimento (y/n): ")
+    if create == 'y':
+        obj = create_incarico(file)
+        file.write(f"\n# Assegnazione della persona {subj} all'incarico {obj}\n")
+        file.write(f"{subj} ug:assigment {obj} .\n")
+        file.write(f"{obj} ug:assigment {subj} .\n")
+    else:
+        assign = input("Vuoi assegnare la persona ad un incarico esistente (y/n): ")
+        if assign == 'y':
+            assign_persona_incarico(file, subj, '')
     create = ''
     while create != 'n':
         create = input("Vuoi creare un contatto relativo alla persona (y/n): ")
         if create == 'y':
             obj = create_contatto(file)
-            file.write(f"{subj} sc:hasOccupation {obj} .\n")
-            file.write(f"{obj} sc:hasOccupation {subj} .\n")
+            file.write(f"\n# Assegnazione della persona {subj} al contatto {obj}\n")
+            file.write(f"{subj} sc:contactPoint {obj} .\n")
+            file.write(f"{obj} sc:contactPoint {subj} .\n")
         else:
             assign = input("Vuoi assegnare la persona ad un contatto esistente (y/n): ")
             if assign == 'y':
@@ -138,6 +155,7 @@ def create_persona(file):
         create = input("Vuoi associare l'url di un curriculum relativo alla persona (y/n): ")
         if create == 'y':
             obj = create_url(file)
+            file.write(f"\n# Assegnazione della persona {subj} all'url {obj}\n")
             file.write(f"{subj} sc:url {obj} .\n")
             file.write(f"{obj} sc:url {subj} .\n")
         else:
@@ -147,24 +165,17 @@ def create_persona(file):
     create = input("Vuoi associare un'immagine alla persona (y/n): ")
     if create == 'y':
         obj = create_immagine(file)
+        file.write(f"\n# Assegnazione della persona {subj} all'immagine {obj}\n")
         file.write(f"{subj} sc:image {obj} .\n")
         file.write(f"{obj} sc:image {subj} .\n")
     else:
         assign = input("Vuoi assegnare alla persona un'immagine esistente (y/n): ")
         if assign == 'y':
             assign_persona_immagine(file, subj, '')
-    create = input("Vuoi creare l'url della planimetria della stanza dove lavora la persona (y/n): ")
-    if create == 'y':
-        obj = create_dipartimento(file)
-        file.write(f"{subj} sc:url {obj} .\n")
-        file.write(f"{obj} sc:url {subj} .\n")
-    else:
-        assign = input("Vuoi assegnare l'url della planimetria della stanza dove lavora la persona (y/n): ")
-        if assign == 'y':
-            assign_persona_url(file, subj, '')
     create = input("Vuoi creare il ssd associato alla persona (y/n): ")
     if create == 'y':
         obj = create_ssd(file)
+        file.write(f"\n# Assegnazione della persona {subj} al ssd {obj}\n")
         file.write(f"{subj} sc:member {obj} .\n")
         file.write(f"{obj} sc:member {subj} .\n")
     else:
@@ -176,7 +187,7 @@ def create_persona(file):
 
 def create_occupazione(file):
     subj = input("Inserisci il soggetto all'occupazione: ")
-    file.write(f"# Definizione dell'occupazione {subj}\n")
+    file.write(f"\n# Definizione dell'occupazione {subj}\n")
     file.write(f"{subj} rdf:type sc:Occupation .\n")
     qualifica = input("Inserisci la qualifica dell'occupazione: ")
     file.write(f"{subj} sc:qualifications \"{qualifica}\" .\n")
@@ -185,7 +196,7 @@ def create_occupazione(file):
 
 def create_contatto(file):
     subj = input("Inserisci il soggetto al contatto: ")
-    file.write(f"# Definizione del contatto {subj}\n")
+    file.write(f"\n# Definizione del contatto {subj}\n")
     file.write(f"{subj} rdf:type sc:ContactPoint .\n")
     email = input("Inserisci l'email del contatto: ")
     if email != '':
@@ -208,6 +219,7 @@ def create_contatto(file):
     create = input("Vuoi creare l'URL alla planimetria della stanza relativo al contatto (y/n): ")
     if create == 'y':
         obj = create_url(file)
+        file.write(f"\n# Assegnazione del contatto {subj} all'url {obj}\n")
         file.write(f"{subj} sc:url {obj} .\n")
         file.write(f"{obj} sc:url {subj} .\n")
     else:
@@ -219,7 +231,7 @@ def create_contatto(file):
 
 def create_dipartimento(file):
     subj = input("Inserisci il soggetto al dipartimento: ")
-    file.write(f"# Definizione del dipartimento {subj}\n")
+    file.write(f"\n# Definizione del dipartimento {subj}\n")
     file.write(f"{subj} rdf:type ug:Department .\n")
     sigla = input("Inserisci la sigla del dipartimento: ")
     file.write(f"{subj} sc:branchCode \"{sigla}\" .\n")
@@ -228,6 +240,7 @@ def create_dipartimento(file):
     create = input("Vuoi creare l'oggetto indirizzo del dipartimento (y/n): ")
     if create == 'y':
         obj = create_indirizzo(file)
+        file.write(f"\n# Assegnazione del dipartimento {subj} all'indirizzo {obj}\n")
         file.write(f"{subj} sc:address {obj} .\n")
         file.write(f"{obj} sc:address {subj} .\n")
     else:
@@ -237,6 +250,7 @@ def create_dipartimento(file):
     create = input("Vuoi creare l'url del dipartimento (y/n): ")
     if create == 'y':
         obj = create_url(file)
+        file.write(f"\n# Assegnazione del dipartimento {subj} all'url {obj}\n")
         file.write(f"{subj} sc:url {obj} .\n")
         file.write(f"{obj} sc:url {subj} .\n")
     else:
@@ -248,6 +262,7 @@ def create_dipartimento(file):
         create = input("Vuoi creare il ruolo di una persona nel dipartimento (y/n): ")
         if create == 'y':
             obj = create_occupazione(file)
+            file.write(f"\n# Assegnazione del dipartimento {subj} al contatto {obj}\n")
             file.write(f"{subj} sc:contactPoint {obj} .\n")
             file.write(f"{obj} sc:contactPoint {subj} .\n")
         else:
@@ -257,6 +272,7 @@ def create_dipartimento(file):
     create = input("Vuoi creare le coordinate del dipartimento (y/n): ")
     if create == 'y':
         obj = create_coordinata_geo(file)
+        file.write(f"\n# Assegnazione del dipartimento {subj} alla coordinata geo {obj}\n")
         file.write(f"{subj} ug:geo {obj} .\n")
         file.write(f"{obj} ug:geo {subj} .\n")
     else:
@@ -266,6 +282,7 @@ def create_dipartimento(file):
     create = input("Vuoi creare l'edificio relativo al dipartimento (y/n): ")
     if create == 'y':
         obj = create_edificio(file)
+        file.write(f"\n# Assegnazione del dipartimento {subj} all'ufficio {obj}\n")
         file.write(f"{subj} sc:department {obj} .\n")
         file.write(f"{obj} sc:department {subj} .\n")
     else:
@@ -275,26 +292,29 @@ def create_dipartimento(file):
     return subj
 
 
+def create_incarico(file):
+    subj = input("Inserisci il soggetto dell'incarico: ")
+    file.write(f"\n# Definizione dell'incarico {subj}\n")
+    file.write(f"{subj} rdf:type sc:Role .\n")
+    name = input("Inserisci il nome dell'incarico: ")
+    file.write(f"{subj} sc:roleName \"{name}\" .\n")
+    return subj
+
+
 def create_url(file):
     subj = input("Inserisci il soggetto dell'url: ")
-    file.write(f"# Definizione dell'url {subj}\n")
+    file.write(f"\n# Definizione dell'url {subj}\n")
     file.write(f"{subj} rdf:type sc:URL .\n")
     url = input("Inserisci l'url relativo: ")
     file.write(f"{subj} ug:link \"{url}\" .\n")
     descr = input("Inserisci la descrizione dell'url: ")
     file.write(f"{subj} sc:description \"{descr}\" .\n")
-    assign = input("Vuoi assegnare l'url come curriculum ad una persona esistente (y/n): ")
-    if assign == 'y':
-        assign_persona_url(file, '', subj)
-    assign = input("Vuoi assegnare l'url come sito web di un dipartimento esistente (y/n): ")
-    if assign == 'y':
-        assign_dipartimento_url(file, '', subj)
     return subj
 
 
 def create_immagine(file):
     subj = input("Inserisci il soggetto dell'immagine: ")
-    file.write(f"# Definizione dell'immagine {subj}\n")
+    file.write(f"\n# Definizione dell'immagine {subj}\n")
     file.write(f"{subj} rdf:type sc:ImageObject .\n")
     caption = input("Inserisci la didascalia relativo: ")
     file.write(f"{subj} sc:caption \"{caption}\" .\n")
@@ -307,6 +327,7 @@ def create_immagine(file):
     create = input("Vuoi creare l'url dell'immagine (y/n): ")
     if create == 'y':
         obj = create_url(file)
+        file.write(f"\n# Assegnazione dell'immagine {subj} all'url {obj}\n")
         file.write(f"{subj} sc:url {obj} .\n")
         file.write(f"{obj} sc:url {subj} .\n")
     else:
@@ -318,7 +339,7 @@ def create_immagine(file):
 
 def create_coordinata_geo(file):
     subj = input("Inserisci il soggetto di coordinate geo: ")
-    file.write(f"# Definizione della coordinata geo {subj}\n")
+    file.write(f"\n# Definizione della coordinata geo {subj}\n")
     file.write(f"{subj} rdf:type geo:Point .\n")
     lat = input("Inserisci la latitudine relativa: ")
     file.write(f"{subj} sc:lat \"{lat}\"^^xsd:float .\n")
@@ -329,7 +350,7 @@ def create_coordinata_geo(file):
 
 def create_ssd(file):
     subj = input("Inserisci il soggetto di settore scientifico disciplinare: ")
-    file.write(f"# Definizione del ssd {subj}\n")
+    file.write(f"\n# Definizione del ssd {subj}\n")
     file.write(f"{subj} rdf:type ug:Ssd .\n")
     name = input("Inserisci il nome relativo: ")
     file.write(f"{subj} sc:legalName {name} .\n")
@@ -393,9 +414,19 @@ def assign_persona_dipartimento(file, subj, obj):
         subj = input("Inserisci il soggetto della persona: ")
     if obj == '':
         obj = input("Inserisci l'oggetto del dipartimento: ")
-    file.write(f"\n# Assegnazione della persona {subj} all'indirizzo {obj}\n")
+    file.write(f"\n# Assegnazione della persona {subj} al dipartimento {obj}\n")
     file.write(f"{subj} sc:worksFor {obj} .\n")
     file.write(f"{obj} sc:employee {subj} .\n")
+
+
+def assign_persona_incarico(file, subj, obj):
+    if subj == '':
+        subj = input("Inserisci il soggetto della persona: ")
+    if obj == '':
+        obj = input("Inserisci l'oggetto dell'incarico: ")
+    file.write(f"\n# Assegnazione della persona {subj} all'incarico {obj}\n")
+    file.write(f"{subj} ug:assignment {obj} .\n")
+    file.write(f"{obj} ug:assignment {subj} .\n")
 
 
 def assign_persona_url(file, subj, obj):
@@ -529,19 +560,19 @@ if __name__ == '__main__':
 
     value = ''
 
+    file = open(filename, "a+")
+
     while value != 'q':
         print('Seleziona un tra le seguenti operazioni digitando la lettera iniziale.\n')
 
         print('1) Aggiungi un soggetto')
         print('2) Assegna un soggetto ad un oggetto')
-        print('q) Esci dal programma')
+        print('3) Esci dal programma')
 
         value = input("Inserisci un'operazione: ")
 
-        file = open(filename, "a+")
-
         if value == '1':
-            while value != 'q':
+            while value != 'z':
                 print('a) Aggiungi un edificio')
                 print('b) Aggiungi un indirizzo')
                 print('c) Aggiungi una persona')
@@ -576,28 +607,27 @@ if __name__ == '__main__':
                     create_coordinata_geo(file)
                 if value == 'j':
                     create_ssd(file)
-                if value == 'z':
-                    break
 
         if value == '2':
-            while value != 'q':
+            while value != 'z':
                 print('a) Assegna un indirizzo ad un edificio')
                 print('b) Assegna un indirizzo ad un dipartimento')
                 print('c) Assegna una persona ad un edificio')
                 print('d) Assegna una persona ad un dipartimento')
-                print('e) Assegna una occupazione ad una persona')
-                print('f) Assegna un contatto ad una persona')
-                print('g) Assegna un url ad una persona')
-                print('h) Assegna una immagine ad una persona')
-                print('i) Assegna una immagine ad un url')
-                print('j) Assegna un url ad un contatto')
-                print('k) Assegna un contatto ad un dipartimento')
-                print('l) Assegna una coordinata geo ad un edificio')
-                print('m) Assegna una coordinata geo ad un dipartimento')
-                print('n) Assegna una occupazione ad un dipartimento')
-                print('o) Assegna una edificio ad un dipartimento')
-                print('p) Assegna un contatto ad un dipartimento')
-                print('q) Assegna una persona ad un settore scientifico disciplinare')
+                print('e) Assegna una persona ad un incarico')
+                print('f) Assegna una occupazione ad una persona')
+                print('g) Assegna un contatto ad una persona')
+                print('h) Assegna un url ad una persona')
+                print('i) Assegna una immagine ad una persona')
+                print('j) Assegna una immagine ad un url')
+                print('k) Assegna un url ad un contatto')
+                print('l) Assegna un contatto ad un dipartimento')
+                print('m) Assegna una coordinata geo ad un edificio')
+                print('n) Assegna una coordinata geo ad un dipartimento')
+                print('o) Assegna una occupazione ad un dipartimento')
+                print('p) Assegna una edificio ad un dipartimento')
+                print('q) Assegna un contatto ad un dipartimento')
+                print('r) Assegna una persona ad un settore scientifico disciplinare')
                 print('z) Torna indietro')
 
                 value = input("Inserisci un'operazione: ")
@@ -611,35 +641,35 @@ if __name__ == '__main__':
                 if value == 'd':
                     assign_persona_dipartimento(file, '', '')
                 if value == 'e':
-                    assign_persona_occupazione(file, '', '')
+                    assign_persona_incarico(file, '', '')
                 if value == 'f':
-                    assign_persona_contatto(file, '', '')
+                    assign_persona_occupazione(file, '', '')
                 if value == 'g':
-                    assign_persona_url(file, '', '')
+                    assign_persona_contatto(file, '', '')
                 if value == 'h':
-                    assign_persona_immagine(file, '', '')
+                    assign_persona_url(file, '', '')
                 if value == 'i':
-                    assign_immagine_url(file, '', '')
+                    assign_persona_immagine(file, '', '')
                 if value == 'j':
-                    assign_contatto_url(file, '', '')
+                    assign_immagine_url(file, '', '')
                 if value == 'k':
-                    assign_dipartimento_contatto(file, '', '')
+                    assign_contatto_url(file, '', '')
                 if value == 'l':
-                    assign_coordinata_geo_edificio(file, '', '')
+                    assign_dipartimento_contatto(file, '', '')
                 if value == 'm':
-                    assign_coordinata_geo_dipartimento(file, '', '')
+                    assign_coordinata_geo_edificio(file, '', '')
                 if value == 'n':
-                    assign_dipartimento_occupazione(file, '', '')
+                    assign_coordinata_geo_dipartimento(file, '', '')
                 if value == 'o':
-                    assign_dipartimento_edificio(file, '', '')
+                    assign_dipartimento_occupazione(file, '', '')
                 if value == 'p':
-                    assign_occupazione_dipartimento(file, '', '')
+                    assign_dipartimento_edificio(file, '', '')
                 if value == 'q':
+                    assign_occupazione_dipartimento(file, '', '')
+                if value == 'r':
                     assign_persona_ssd(file, '', '')
-                if value == 'z':
-                    break
 
-        if value == 'q':
+        if value == '3':
             break
 
-        file.close()
+    file.close()

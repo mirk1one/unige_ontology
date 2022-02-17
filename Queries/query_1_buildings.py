@@ -2,8 +2,6 @@ from virtuoso_call_sparql import call_local_sparql
 
 print("Restituisce tutti gli edifici con indirizzo e coordinate geo")
 
-select = ["edificio", "nome", "indirizzo"]
-
 query = """PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX ug: <http://www.unige.it/2022/01/>
 PREFIX sc: <http://www.schema.org/>
@@ -23,4 +21,4 @@ WHERE
   }
 }"""
     
-call_local_sparql(query, select, "query_1_buildings")
+call_local_sparql(query, "query_1_buildings")

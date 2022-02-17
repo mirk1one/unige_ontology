@@ -9,8 +9,6 @@ edificio = argument.name
 
 print(f"\nDato l'edificio {edificio}, restituisce tutte le persone che ci lavorano\n")
 
-select = ["edificio", "nome_persona", "cognome_persona", "ssd", "nome_edificio", "url_planimetria", "stanza", "telefono", "email"]
-
 query = """PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX ug: <http://www.unige.it/2022/01/>
 PREFIX sc: <http://www.schema.org/>
@@ -41,4 +39,4 @@ WHERE
 }
 ORDER BY ?cognome_persona"""
     
-call_local_sparql(query, select, "query_2_person_building_2")
+call_local_sparql(query, "query_2_person_building_2")

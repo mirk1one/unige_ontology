@@ -9,13 +9,11 @@ codice = argument.code
 
 print(f"Data la sigla del ssd {codice}, restituisce tutte le persone affiliate\n")
 
-select = ["ssd", "nome", "afferenza", "telefono", "email"]
-
 query = """PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX ug: <http://www.unige.it/2022/01/>
 PREFIX sc: <http://www.schema.org/>
 
-SELECT DISTINCT ?ssd ?nome ?afferenza ?telefono ?email
+SELECT DISTINCT ?ssd ?nome ?afferenza (group_concat(DISTINCT ?dato_contatto, "; ") as ?contatti)
 WHERE
 {
   ?ssd rdf:type ug:Ssd .
@@ -28,11 +26,32 @@ WHERE
   ?dipartimento sc:name ?sigla_dipartimento .
   ?dipartimento sc:legalName ?nome_dipartimento .
   BIND(CONCAT(?nome_dipartimento, " - ", ?sigla_dipartimento) AS ?afferenza) .
-  ?persona sc:contactPoint ?contatto .
-  OPTIONAL { ?contatto sc:telephone ?telefono } .
-  OPTIONAL { ?contatto sc:email ?email } .
+  {
+    SELECT ?dato_contatto
+    WHERE
+    {
+      ?p sc:givenName ?nome_persona .
+      ?p sc:familyName ?cognome_persona .
+      ?p sc:contactPoint ?c .
+      ?c sc:telephone ?v .
+      ?c sc:contactType ?t .
+      BIND(CONCAT(?v, " ", ?t) AS ?dato_contatto) .
+    }
+  } UNION
+  {
+    SELECT ?dato_contatto
+    WHERE
+    {
+      ?p sc:givenName ?nome_persona .
+      ?p sc:familyName ?cognome_persona .
+      ?p sc:contactPoint ?c .
+      ?c sc:email ?v .
+      ?c sc:contactType ?t .
+      BIND(CONCAT(?v, " ", ?t) AS ?dato_contatto) .
+    }
+  }
   FILTER (?codice_ssd = \"""" + codice + """\")
 }
-ORDER BY ?cognome_persona"""
+GROUP BY ?ssd ?nome ?afferenza"""
     
-call_local_sparql(query, select, "query_9_ssd_persons")
+call_local_sparql(query, "query_9_ssd_persons")
