@@ -1,3 +1,4 @@
+# Prefissi usati nella ontologia
 @prefix ug: <http://www.unige.it/2022/01/> .
 @prefix sc: <http://www.schema.org/> .
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
@@ -7,65 +8,74 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+# Definizione di edificio e di dipartimento
 ug:CollegeOrUniversityBuilding rdfs:subClassOf sc:CollegeOrUniversity .
 ug:Department rdfs:subClassOf sc:EducationOrganization .
 
-ug:occupationDepartment rdf:type rdf:Property .
-ug:occupationDepartment rdfs:label "Il dipartimento in cui la persona occupa il ruolo" .
-ug:occupationDepartment rdfs:domain sc:Occupation .
-ug:occupationDepartment rdfs:range ug:Department .
-sc:Occupation ug:occupationDepartment ug:Department .
-
+# Definizione di punto geolocalizzato
 ug:geo rdf:type rdf:Property .
 ug:geo rdfs:label "Connette un punto geolocalizzato ad un posto" .
 ug:geo rdfs:domain sc:Place .
 ug:geo rdfs:range geo:Point .
 
+# Definizione del codice di una stanza
 ug:roomCode rdf:type rdf:Property .
 ug:roomCode rdfs:label "Aggiunge il codice della stanza dove lavora" .
 ug:roomCode rdfs:domain sc:ContactPoint .
 ug:roomCode rdfs:range sc:Text .
 
+# Definizione del link riferito ad un url
 ug:link rdf:type rdf:Property .
 ug:link rdfs:label "Collega un url al suo relativo collegamento" .
 ug:link rdfs:domain sc:URL .
 ug:link rdfs:range sc:Text .
 
+# Definizione dell'edificio <https://rubrica.unige.it/edifici/ED_161450201>
 <https://rubrica.unige.it/edifici/ED_161450201> rdf:type ug:CollegeOrUniversityBuilding .
 <https://rubrica.unige.it/edifici/ED_161450201> sc:name "Villa Bonino" .
 <https://rubrica.unige.it/edifici/ED_161450201> sc:address ug:Viale_Causa.
 
+# Definizione dell'indirizzo ug:Viale_Causa
 ug:Viale_Causa sc:address <https://rubrica.unige.it/edifici/ED_161450201> .
 ug:Viale_Causa rdf:type sc:PostalAddress .
 ug:Viale_Causa sc:addressLocality "GENOVA" .
 ug:Viale_Causa sc:streetAddress "Viale Causa 13" .
-ug:Viale_Causa sc:postalCode "16100"^^xsd:Int .
+ug:Viale_Causa sc:postalCode "16100" .
 
+# Definizione dell'edificio <https://rubrica.unige.it/edifici/ED_171000104>
 <https://rubrica.unige.it/edifici/ED_171000104> rdf:type ug:CollegeOrUniversityBuilding .
 <https://rubrica.unige.it/edifici/ED_171000104> sc:name "Campus di Savona - palazzina Lagorio" .
 <https://rubrica.unige.it/edifici/ED_171000104> sc:address ug:Via_Magliotto.
 
+# Definizione dell'indirizzo ug:Via_Magliotto
 ug:Via_Magliotto sc:address <https://rubrica.unige.it/edifici/ED_171000104> .
 ug:Via_Magliotto rdf:type sc:PostalAddress .
 ug:Via_Magliotto sc:addressLocality "SAVONA" .
 ug:Via_Magliotto sc:streetAddress "Via Magliotto 2" .
-ug:Via_Magliotto sc:postalCode "17100"^^xsd:Int .
+ug:Via_Magliotto sc:postalCode "17100" .
 
-<https://rubrica.unige.it/edifici/ED_161450201> sc:employee <https://rubrica.unige.it/personale/VUZCWVtr> .
-<https://rubrica.unige.it/personale/VUZCWVtr> sc:affiliation <https://rubrica.unige.it/edifici/ED_161450201> .
-<https://rubrica.unige.it/edifici/ED_171000104> sc:employee <https://rubrica.unige.it/personale/VUZCWVtr> .
-<https://rubrica.unige.it/personale/VUZCWVtr> sc:affiliation <https://rubrica.unige.it/edifici/ED_171000104> .
+# Definizione della persona <https://rubrica.unige.it/personale/VUZCWVtr>
 <https://rubrica.unige.it/personale/VUZCWVtr> rdf:type sc:Person .
 <https://rubrica.unige.it/personale/VUZCWVtr> sc:givenName "Gianni" .
 <https://rubrica.unige.it/personale/VUZCWVtr> sc:familyName "Vercelli" .
 
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZCWVtr> all'edificio <https://rubrica.unige.it/edifici/ED_161450201>
+<https://rubrica.unige.it/edifici/ED_161450201> sc:employee <https://rubrica.unige.it/personale/VUZCWVtr> .
+<https://rubrica.unige.it/personale/VUZCWVtr> sc:affiliation <https://rubrica.unige.it/edifici/ED_161450201> .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZCWVtr> all'edificio <https://rubrica.unige.it/edifici/ED_171000104>
+<https://rubrica.unige.it/edifici/ED_171000104> sc:employee <https://rubrica.unige.it/personale/VUZCWVtr> .
+<https://rubrica.unige.it/personale/VUZCWVtr> sc:affiliation <https://rubrica.unige.it/edifici/ED_171000104> .
+
+# Definizione dell'occupazione <https://rubrica.unige.it/ruoli/PA>
+<https://rubrica.unige.it/ruoli/PA> rdf:type sc:Occupation .
+<https://rubrica.unige.it/ruoli/PA> sc:qualifications "Professori associati" .
+
+# Associazione della persona <https://rubrica.unige.it/personale/VUZCWVtr> all'occupazione <https://rubrica.unige.it/ruoli/PA>
 <https://rubrica.unige.it/personale/VUZCWVtr> sc:hasOccupation <https://rubrica.unige.it/ruoli/PA> .
 <https://rubrica.unige.it/ruoli/PA> sc:hasOccupation <https://rubrica.unige.it/personale/VUZCWVtr> .
-<https://rubrica.unige.it/ruoli/PA> rdf:type sc:Occupation .
-<https://rubrica.unige.it/ruoli/PA> sc:qualifications "Professore associato" .
 
-<https://rubrica.unige.it/personale/VUZCWVtr> sc:contactPoint ug:Vercelli_Contacts1 .
-ug:Vercelli_Contacts1 sc:contactPoint <https://rubrica.unige.it/personale/VUZCWVtr>.
+# Definizione del contatto ug:Vercelli_Contacts1
 ug:Vercelli_Contacts1 rdf:type sc:ContactPoint .
 ug:Vercelli_Contacts1 sc:email "gianni.vercelli@unige.it" .
 ug:Vercelli_Contacts1 sc:telephone "+390103352814" .
@@ -73,8 +83,11 @@ ug:Vercelli_Contacts1 sc:contactType "Contatti Genova" .
 ug:Vercelli_Contacts1 sc:areaServed "Villa Bonino" .
 ug:Vercelli_Contacts1 ug:roomCode "ST.014" .
 
-<https://rubrica.unige.it/personale/VUZCWVtr> sc:contactPoint ug:Vercelli_Contacts2 .
-ug:Vercelli_Contacts2 sc:contactPoint <https://rubrica.unige.it/personale/VUZCWVtr>.
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZCWVtr> al contatto ug:Vercelli_Contacts1
+<https://rubrica.unige.it/personale/VUZCWVtr> sc:contactPoint ug:Vercelli_Contacts1 .
+ug:Vercelli_Contacts1 sc:contactPoint <https://rubrica.unige.it/personale/VUZCWVtr> .
+
+# Definizione del contatto ug:Vercelli_Contacts2
 ug:Vercelli_Contacts2 rdf:type sc:ContactPoint .
 ug:Vercelli_Contacts2 sc:email "gianni.vercelli@unige.it" .
 ug:Vercelli_Contacts2 sc:telephone "+390103352814" .
@@ -82,135 +95,740 @@ ug:Vercelli_Contacts2 sc:contactType "Contatti Savona" .
 ug:Vercelli_Contacts2 sc:areaServed "Campus di Savona - palazzina Lagorio" .
 ug:Vercelli_Contacts2 ug:roomCode "T.007" .
 
-<https://rubrica.unige.it/spazi/planimetrie/US_161450201.ST.014> sc:url ug:Vercelli_Contacts1 .
-ug:Vercelli_Contacts1 sc:url <https://rubrica.unige.it/spazi/planimetrie/US_161450201.ST.014> .
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZCWVtr> al contatto ug:Vercelli_Contacts2
+<https://rubrica.unige.it/personale/VUZCWVtr> sc:contactPoint ug:Vercelli_Contacts2 .
+ug:Vercelli_Contacts2 sc:contactPoint <https://rubrica.unige.it/personale/VUZCWVtr> .
+
+# Definizione dell'url <https://rubrica.unige.it/spazi/planimetrie/US_161450201.ST.014>
 <https://rubrica.unige.it/spazi/planimetrie/US_161450201.ST.014> rdf:type sc:URL .
 <https://rubrica.unige.it/spazi/planimetrie/US_161450201.ST.014> sc:description "Planimetria stanza ST.014" .
 <https://rubrica.unige.it/spazi/planimetrie/US_161450201.ST.014> ug:link "https://rubrica.unige.it/spazi/planimetrie/US_161450201.ST.014" .
 
-<https://rubrica.unige.it/spazi/planimetrie/US_171000104.T.007> sc:url ug:Vercelli_Contacts2 .
-ug:Vercelli_Contacts2 sc:url <https://rubrica.unige.it/spazi/planimetrie/US_171000104.T.007> .
+# Assegnazione del contatto ug:Vercelli_Contacts1 all'url <https://rubrica.unige.it/spazi/planimetrie/US_161450201.ST.014>
+<https://rubrica.unige.it/spazi/planimetrie/US_161450201.ST.014> sc:url ug:Vercelli_Contacts1 .
+ug:Vercelli_Contacts1 sc:url <https://rubrica.unige.it/spazi/planimetrie/US_161450201.ST.014> .
+
+# Definizione dell'url <https://rubrica.unige.it/spazi/planimetrie/US_171000104.T.007>
 <https://rubrica.unige.it/spazi/planimetrie/US_171000104.T.007> rdf:type sc:URL .
 <https://rubrica.unige.it/spazi/planimetrie/US_171000104.T.007> sc:description "Planimetria stanza T.007" .
 <https://rubrica.unige.it/spazi/planimetrie/US_171000104.T.007> ug:link "https://rubrica.unige.it/spazi/planimetrie/US_171000104.T.007" .
 
-<https://rubrica.unige.it/personale/VUZCWVtr> sc:url <https://cpc-prod.csita.unige.it/output_cv/UEZFWlg%253D/cv_it.pdf?ts=1643650104> .
-<https://cpc-prod.csita.unige.it/output_cv/UEZFWlg%253D/cv_it.pdf?ts=1643650104> sc:url <https://rubrica.unige.it/personale/VUZCWVtr> .
+# Assegnazione del contatto ug:Vercelli_Contacts2 all'url <https://rubrica.unige.it/spazi/planimetrie/US_171000104.T.007>
+<https://rubrica.unige.it/spazi/planimetrie/US_171000104.T.007> sc:url ug:Vercelli_Contacts2 .
+ug:Vercelli_Contacts2 sc:url <https://rubrica.unige.it/spazi/planimetrie/US_171000104.T.007> .
+
+# Definizione dell'url <https://cpc-prod.csita.unige.it/output_cv/UEZFWlg%253D/cv_it.pdf?ts=1643650104>
 <https://cpc-prod.csita.unige.it/output_cv/UEZFWlg%253D/cv_it.pdf?ts=1643650104> rdf:type sc:URL .
 <https://cpc-prod.csita.unige.it/output_cv/UEZFWlg%253D/cv_it.pdf?ts=1643650104> sc:description "Curriculum Vitae (Italiano)" .
 <https://cpc-prod.csita.unige.it/output_cv/UEZFWlg%253D/cv_it.pdf?ts=1643650104> ug:link "https://cpc-prod.csita.unige.it/output_cv/UEZFWlg%253D/cv_it.pdf?ts=1643650104" .
 
-<https://rubrica.unige.it/personale/VUZCWVtr> sc:image ug:Vercelli_Immagine .
-ug:Vercelli_Immagine sc:image <https://rubrica.unige.it/personale/VUZCWVtr> .
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZCWVtr> all'url <https://cpc-prod.csita.unige.it/output_cv/UEZFWlg%253D/cv_it.pdf?ts=1643650104>
+<https://rubrica.unige.it/personale/VUZCWVtr> sc:url <https://cpc-prod.csita.unige.it/output_cv/UEZFWlg%253D/cv_it.pdf?ts=1643650104> .
+<https://cpc-prod.csita.unige.it/output_cv/UEZFWlg%253D/cv_it.pdf?ts=1643650104> sc:url <https://rubrica.unige.it/personale/VUZCWVtr> .
+
+# Definizione dell'immagine ug:Vercelli_Immagine
 ug:Vercelli_Immagine rdf:type sc:ImageObject .
 ug:Vercelli_Immagine sc:caption "image" .
 ug:Vercelli_Immagine sc:encodingFormat "jpg" .
-ug:Vercelli_Immagine sc:height "500"^^xsd:Int .
-ug:Vercelli_Immagine sc:width "500"^^xsd:Int .
+ug:Vercelli_Immagine sc:height "500"^^xsd:int .
+ug:Vercelli_Immagine sc:width "500"^^xsd:int .
 
-ug:Vercelli_Immagine sc:url <https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139> .
-<https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139> sc:url ug:Vercelli_Immagine .
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZCWVtr> all'immagine ug:Vercelli_Immagine
+<https://rubrica.unige.it/personale/VUZCWVtr> sc:image ug:Vercelli_Immagine .
+ug:Vercelli_Immagine sc:image <https://rubrica.unige.it/personale/VUZCWVtr> .
+
+# Definizione dell'url <https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139>
 <https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139> rdf:type sc:URL .
 <https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139> sc:description "Immagine Gianni Vercelli" .
 <https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139> ug:link "https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139" .
 
+# Assegnazione dell'immagine <https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139> all'url ug:Vercelli_Immagine
+ug:Vercelli_Immagine sc:url <https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139> .
+<https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139> sc:url ug:Vercelli_Immagine .
+
+# Definizione del dipartimento <https://rubrica.unige.it/strutture/struttura/100023>
 <https://rubrica.unige.it/strutture/struttura/100023> rdf:type ug:Department .
 <https://rubrica.unige.it/strutture/struttura/100023> sc:branchCode "DIBRIS" .
 <https://rubrica.unige.it/strutture/struttura/100023> sc:legalName "Dipartimento di informatica, bioingegneria, robotica e ingegneria dei sistemi" .
 
-<https://rubrica.unige.it/strutture/struttura/100023> sc:url <https://dibris.unige.it/> .
-<https://dibris.unige.it/> sc:url <https://rubrica.unige.it/strutture/struttura/100023> .
+# Definizione dell'url <https://dibris.unige.it/>
 <https://dibris.unige.it/> rdf:type sc:URL .
 <https://dibris.unige.it/> sc:description "Sito web DIBRIS" .
 <https://dibris.unige.it/> ug:link "https://dibris.unige.it/" .
 
+# Assegnazione del dipartimento <https://rubrica.unige.it/strutture/struttura/100023> all'url <https://dibris.unige.it/>
+<https://rubrica.unige.it/strutture/struttura/100023> sc:url <https://dibris.unige.it/> .
+<https://dibris.unige.it/> sc:url <https://rubrica.unige.it/strutture/struttura/100023> .
+
+# Assegnazione del dipartimento <https://dibris.unige.it/> all'edificio <https://rubrica.unige.it/edifici/ED_161450201>
 <https://dibris.unige.it/> sc:department <https://rubrica.unige.it/edifici/ED_161450201> .
 <https://rubrica.unige.it/edifici/ED_161450201> sc:department <https://dibris.unige.it/> . 
 
-<https://rubrica.unige.it/strutture/struttura/100023> sc:address ug:Opera_Pia .
-ug:Opera_Pia sc:address <https://rubrica.unige.it/strutture/struttura/100023> .
+# Definizione dell'indirizzo ug:Opera_Pia
 ug:Opera_Pia rdf:type sc:PostalAddress .
 ug:Opera_Pia sc:addressLocality "GENOVA" .
 ug:Opera_Pia sc:streetAddress "Viale Opera Pia 13" .
 ug:Opera_Pia sc:postalCode "16100" .
 
+# Assegnazione dell'edificio <https://rubrica.unige.it/strutture/struttura/100023> all'indirizzo ug:Opera_Pia
+<https://rubrica.unige.it/strutture/struttura/100023> sc:address ug:Opera_Pia .
+ug:Opera_Pia sc:address <https://rubrica.unige.it/strutture/struttura/100023> .
+
+# Assegnazione dell'edificio <https://rubrica.unige.it/strutture/struttura/100023> al dipartimento <https://dibris.unige.it/>
 <https://rubrica.unige.it/strutture/struttura/100023> sc:employee <https://rubrica.unige.it/personale/VUZCWVtr> .
 <https://rubrica.unige.it/personale/VUZCWVtr> sc:worksFor <https://rubrica.unige.it/strutture/struttura/100023> .
 
-<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts1 .
-ug:DIBRIS_Contacts1 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+# Definizione del contatto ug:DIBRIS_Contacts1
 ug:DIBRIS_Contacts1 rdf:type sc:ContactPoint .
 ug:DIBRIS_Contacts1 sc:telephone "+390103532194" .
 ug:DIBRIS_Contacts1 sc:contactType "Telefono 1 DIBRIS" .
 
-<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts2 .
-ug:DIBRIS_Contacts2 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+# Assegnazione dell'edificio <https://rubrica.unige.it/strutture/struttura/100023> al contatto ug:DIBRIS_Contacts1
+<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts1 .
+ug:DIBRIS_Contacts1 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+
+# Definizione del contatto ug:DIBRIS_Contacts2
 ug:DIBRIS_Contacts2 rdf:type sc:ContactPoint .
 ug:DIBRIS_Contacts2 sc:telephone "+390103532285" .
 ug:DIBRIS_Contacts2 sc:contactType "Telefono 2 DIBRIS" .
 
-<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts3 .
-ug:DIBRIS_Contacts3 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts2 .
+ug:DIBRIS_Contacts2 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+
+# Definizione del contatto ug:DIBRIS_Contacts3
 ug:DIBRIS_Contacts3 rdf:type sc:ContactPoint .
 ug:DIBRIS_Contacts3 sc:fax "+390103532154" .
 ug:DIBRIS_Contacts3 sc:contactType "Fax 1 DIBRIS" .
 
-<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts4 .
-ug:DIBRIS_Contacts4 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts3 .
+ug:DIBRIS_Contacts3 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+
+# Definizione del contatto ug:DIBRIS_Contacts4
 ug:DIBRIS_Contacts4 rdf:type sc:ContactPoint .
 ug:DIBRIS_Contacts4 sc:fax "+390103532948" .
 ug:DIBRIS_Contacts4 sc:contactType "Fax 2 DIBRIS" .
 
-<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts5 .
-ug:DIBRIS_Contacts5 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts4 .
+ug:DIBRIS_Contacts4 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+
+# Definizione del contatto ug:DIBRIS_Contacts5
 ug:DIBRIS_Contacts5 rdf:type sc:ContactPoint .
 ug:DIBRIS_Contacts5 sc:email "amministrativi@dibris.unige.it" .
 ug:DIBRIS_Contacts5 sc:contactType "Email amministrativi DIBRIS" .
 
-<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts6 .
-ug:DIBRIS_Contacts6 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts5 .
+ug:DIBRIS_Contacts5 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+
+# Definizione del contatto ug:DIBRIS_Contacts6
 ug:DIBRIS_Contacts6 rdf:type sc:ContactPoint .
 ug:DIBRIS_Contacts6 sc:email "info@dibris.unige.it" .
 ug:DIBRIS_Contacts6 sc:contactType "Email informazioni DIBRIS" .
 
-<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts7 .
-ug:DIBRIS_Contacts7 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts6 .
+ug:DIBRIS_Contacts6 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+
+# Definizione del contatto ug:DIBRIS_Contacts7
 ug:DIBRIS_Contacts7 rdf:type sc:ContactPoint .
 ug:DIBRIS_Contacts7 sc:email "dibris@pec.unige.it" .
 ug:DIBRIS_Contacts7 sc:contactType "PEC DIBRIS" .
 
-<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts8 .
-ug:DIBRIS_Contacts8 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts7 .
+ug:DIBRIS_Contacts7 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+
+# Definizione del contatto ug:DIBRIS_Contacts8
 ug:DIBRIS_Contacts8 rdf:type sc:ContactPoint .
 ug:DIBRIS_Contacts8 sc:email "direttore@dibris.unige.it" .
 ug:DIBRIS_Contacts8 sc:contactType "Email direttore di dipartimento" .
 
-<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts9 .
-ug:DIBRIS_Contacts9 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts8 .
+ug:DIBRIS_Contacts8 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+
+# Definizione del contatto ug:DIBRIS_Contacts9
 ug:DIBRIS_Contacts9 rdf:type sc:ContactPoint .
 ug:DIBRIS_Contacts9 sc:email "segretario@dibris.unige.it" .
 ug:DIBRIS_Contacts9 sc:contactType "Email responsabile amministrativo" .
 
-<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts10 .
-ug:DIBRIS_Contacts10 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts9 .
+ug:DIBRIS_Contacts9 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+
+# Definizione del contatto ug:DIBRIS_Contacts10
 ug:DIBRIS_Contacts10 rdf:type sc:ContactPoint .
 ug:DIBRIS_Contacts10 sc:email "ufficio.didattica@dibris.unige.it" .
 ug:DIBRIS_Contacts10 sc:contactType "Email ufficio didattica" .
 
-<https://rubrica.unige.it/edifici/ED_161450201> ug:geo ug:Villa_Bonino_Geopoint .
-ug:Villa_Bonino_Geopoint ug:geo <https://rubrica.unige.it/edifici/ED_161450201> .
+<https://rubrica.unige.it/strutture/struttura/100023> sc:contactPoint ug:DIBRIS_Contacts10 .
+ug:DIBRIS_Contacts10 sc:contactPoint <https://rubrica.unige.it/strutture/struttura/100023> .
+
+# Definizione della coordinata geo ug:Villa_Bonino_Geopoint
 ug:Villa_Bonino_Geopoint rdf:Type geo:Point .
 ug:Villa_Bonino_Geopoint geo:lat "44.4013744"^^xsd:float .
 ug:Villa_Bonino_Geopoint geo:long "8.9599020"^^xsd:float .
 
-<https://rubrica.unige.it/strutture/struttura/100023> ug:geo Dibris_Geopoint .
-Dibris_Geopoint ug:geo <https://rubrica.unige.it/strutture/struttura/100023> .
-ug:Villa_Bonino_Geopoint rdf:Type geo:Point .
-Dibris_Geopoint geo:lat "44.4409459"^^xsd:float .
-Dibris_Geopoint geo:long "8.8814226"^^xsd:float .
+# Assegnazione dell'edificio <https://rubrica.unige.it/edifici/ED_161450201> alle coordinate geo ug:Villa_Bonino_Geopoint
+<https://rubrica.unige.it/edifici/ED_161450201> ug:geo ug:Villa_Bonino_Geopoint .
+ug:Villa_Bonino_Geopoint ug:geo <https://rubrica.unige.it/edifici/ED_161450201> .
 
+# Definizione della coordinata geo ug:Dibris_Geopoint
+ug:Dibris_Geopoint rdf:Type geo:Point .
+ug:Dibris_Geopoint geo:lat "44.4409459"^^xsd:float .
+ug:Dibris_Geopoint geo:long "8.8814226"^^xsd:float .
+
+# Assegnazione del dipartimento <https://rubrica.unige.it/strutture/struttura/100023> alle coordinate geo ug:geo Dibris_Geopoint
+<https://rubrica.unige.it/strutture/struttura/100023> ug:geo ug:Dibris_Geopoint .
+ug:Dibris_Geopoint ug:geo <https://rubrica.unige.it/strutture/struttura/100023> .
+
+# Definizione del ssd <https://rubrica.unige.it/ssd/ING-INF/05>
 <https://rubrica.unige.it/ssd/ING-INF/05> rdf:type ug:Ssd .
 <https://rubrica.unige.it/ssd/ING-INF/05> sc:legalName "SISTEMI DI ELABORAZIONE DELLE INFORMAZIONI" .
 <https://rubrica.unige.it/ssd/ING-INF/05> sc:branchCode "ING-INF/05" .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZCWVtr> al ssd <https://rubrica.unige.it/ssd/ING-INF/05>
 <https://rubrica.unige.it/ssd/ING-INF/05> sc:member <https://rubrica.unige.it/personale/VUZCWVtr> .
 <https://rubrica.unige.it/personale/VUZCWVtr> sc:member <https://rubrica.unige.it/ssd/ING-INF/05> .
+
+# Definizione dell'edificio <https://rubrica.unige.it/edifici/ED_161450402>
+<https://rubrica.unige.it/edifici/ED_161450402> rdf:type ug:CollegeOrUniversityBuilding .
+<https://rubrica.unige.it/edifici/ED_161450402> sc:name "Opera Pia - padiglione E" .
+
+# Assegnazione dell'edificio <https://rubrica.unige.it/edifici/ED_161450402> all'indirizzo ug:Via_Opera_Pia
+<https://rubrica.unige.it/edifici/ED_161450402> sc:address ug:Opera_Pia .
+ug:Opera_Pia sc:address <https://rubrica.unige.it/edifici/ED_161450402> .
+
+# Definizione della coordinata geo ug:Opera_Pia_Pad_E
+ug:Opera_Pia_Pad_E_Geopoint rdf:type geo:Point .
+ug:Opera_Pia_Pad_E_Geopoint sc:lat "44.4409459"^^xsd:float .
+ug:Opera_Pia_Pad_E_Geopoint sc:long "8.8814226"^^xsd:float .
+
+# Assegnazione dell'edificio <https://rubrica.unige.it/edifici/ED_161450402> alla coordinata geo ug:Opera_Pia_Pad_E
+<https://rubrica.unige.it/edifici/ED_161450402> ug:geo ug:Opera_Pia_Pad_E_Geopoint .
+ug:Opera_Pia_Pad_E_Geopoint ug:geo <https://rubrica.unige.it/edifici/ED_161450402> .
+
+# Assegnazione del dipartimento <https://dibris.unige.it/> all'edificio <https://rubrica.unige.it/edifici/ED_161450402>
+<https://dibris.unige.it/> sc:department <https://rubrica.unige.it/edifici/ED_161450402> .
+<https://rubrica.unige.it/edifici/ED_161450402> sc:department <https://dibris.unige.it/> .
+
+# Definizione della persona <https://rubrica.unige.it/personale/VUZEWF1r>
+<https://rubrica.unige.it/personale/VUZEWF1r> rdf:type sc:Person .
+<https://rubrica.unige.it/personale/VUZEWF1r> sc:givenName "Michele" .
+<https://rubrica.unige.it/personale/VUZEWF1r> sc:familyName "Aicardi" .
+
+# Definizione dell'occupazione <https://rubrica.unige.it/ruoli/PO>
+<https://rubrica.unige.it/ruoli/PO> rdf:type sc:Occupation .
+<https://rubrica.unige.it/ruoli/PO> sc:qualifications "Professori ordinari" .
+<https://rubrica.unige.it/personale/VUZEWF1r> sc:hasOccupation <https://rubrica.unige.it/ruoli/PO> .
+<https://rubrica.unige.it/ruoli/PO> sc:hasOccupation <https://rubrica.unige.it/personale/VUZEWF1r> .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZEWF1r> all'edificio <https://rubrica.unige.it/edifici/ED_161450402>
+<https://rubrica.unige.it/personale/VUZEWF1r> sc:affiliation <https://rubrica.unige.it/edifici/ED_161450402> .
+<https://rubrica.unige.it/edifici/ED_161450402> sc:employee <https://rubrica.unige.it/personale/VUZEWF1r> .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZEWF1r> al dipartimento <https://dibris.unige.it/>
+<https://rubrica.unige.it/personale/VUZEWF1r> sc:worksFor <https://dibris.unige.it/> .
+<https://dibris.unige.it/> sc:employee <https://rubrica.unige.it/personale/VUZEWF1r> .
+
+# Definizione del contatto ug:Aicardi_Contacts
+ug:Aicardi_Contacts rdf:type sc:ContactPoint .
+ug:Aicardi_Contacts sc:email "michele.aicardi@unige.it" .
+ug:Aicardi_Contacts sc:telephone "+390103352746" .
+ug:Aicardi_Contacts sc:contactType "Contatti Aicardi" .
+ug:Aicardi_Contacts sc:areaServed "Opera Pia - padiglione E" .
+ug:Aicardi_Contacts ug:roomCode "IV.007" .
+
+# Definizione dell'immagine ug:Aicardi_Immagine
+ug:Aicardi_Immagine rdf:type sc:ImageObject .
+ug:Aicardi_Immagine sc:caption "image" .
+ug:Aicardi_Immagine sc:encodingFormat "jpg" .
+ug:Aicardi_Immagine sc:height "500"^^xsd:int .
+ug:Aicardi_Immagine sc:width "500"^^xsd:int .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZEWF1r> all'immagine <https://rubrica.unige.it/personale/VUZEWF1r>
+<https://rubrica.unige.it/personale/VUZEWF1r> sc:image ug:Aicardi_Immagine .
+ug:Aicardi_Immagine sc:image <https://rubrica.unige.it/personale/VUZEWF1r> .
+
+# Definizione dell'url <https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139>
+<https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139> rdf:type sc:URL .
+<https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139> sc:description "Immagine Gianni Vercelli" .
+<https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139> ug:link "https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139" .
+
+# Assegnazione dell'immagine ug:Aicardi_Contacts all'url <https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139>
+ug:Aicardi_Immagine sc:url <https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139> .
+<https://rubrica.unige.it/static/foto/VUZCWVtr.jpg?1644242693.5139> sc:url ug:Aicardi_Immagine .
+
+# Definizione dell'url <https://rubrica.unige.it/spazi/planimetrie/US_161450402.IV.014>
+<https://rubrica.unige.it/spazi/planimetrie/US_161450402.IV.014> rdf:type sc:URL .
+<https://rubrica.unige.it/spazi/planimetrie/US_161450402.IV.014> ug:link "https://rubrica.unige.it/spazi/planimetrie/US_161450402.IV.014" .
+<https://rubrica.unige.it/spazi/planimetrie/US_161450402.IV.014> sc:description "Planimetria stanza IV.007" .
+
+# Assegnazione del contatto ug:Aicardi_Contacts all'url <https://rubrica.unige.it/static/foto/VUZEWF1r.jpg?1645035348.693>
+ug:Aicardi_Contacts sc:url <https://rubrica.unige.it/static/foto/VUZEWF1r.jpg?1645035348.693> .
+<https://rubrica.unige.it/static/foto/VUZEWF1r.jpg?1645035348.693> sc:url ug:Aicardi_Contacts .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZEWF1r> al contatto ug:Aicardi_Contacts
+<https://rubrica.unige.it/personale/VUZEWF1r> sc:contactPoint ug:Aicardi_Contacts .
+ug:Aicardi_Contacts sc:contactPoint <https://rubrica.unige.it/personale/VUZEWF1r> .
+
+# Definizione dell'url <https://cpc-prod.csita.unige.it/output_cv/UEBEXFg%253D/cv_en.pdf?ts=1645035348>
+<https://cpc-prod.csita.unige.it/output_cv/UEBEXFg%253D/cv_en.pdf?ts=1645035348> rdf:type sc:URL .
+<https://cpc-prod.csita.unige.it/output_cv/UEBEXFg%253D/cv_en.pdf?ts=1645035348> ug:link "https://cpc-prod.csita.unige.it/output_cv/UEBEXFg%253D/cv_en.pdf?ts=1645035348" .
+<https://cpc-prod.csita.unige.it/output_cv/UEBEXFg%253D/cv_en.pdf?ts=1645035348> sc:description "CV inglese Aicardi" .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZEWF1r> all'url <https://cpc-prod.csita.unige.it/output_cv/UEBEXFg%253D/cv_en.pdf?ts=1645035348>
+<https://rubrica.unige.it/personale/VUZEWF1r> sc:url <https://cpc-prod.csita.unige.it/output_cv/UEBEXFg%253D/cv_en.pdf?ts=1645035348> .
+<https://cpc-prod.csita.unige.it/output_cv/UEBEXFg%253D/cv_en.pdf?ts=1645035348> sc:url <https://rubrica.unige.it/personale/VUZEWF1r> .
+
+# Definizione del ssd <https://rubrica.unige.it/ssd/ING-INF/04>
+<https://rubrica.unige.it/ssd/ING-INF/04> rdf:type ug:Ssd .
+<https://rubrica.unige.it/ssd/ING-INF/04> sc:legalName "AUTOMATICA" .
+<https://rubrica.unige.it/ssd/ING-INF/04> sc:branchCode "ING-INF/04" .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZEWF1r> al ssd <https://rubrica.unige.it/ssd/ING-INF/04>
+<https://rubrica.unige.it/personale/VUZEWF1r> sc:member <https://rubrica.unige.it/ssd/ING-INF/04> .
+<https://rubrica.unige.it/ssd/ING-INF/04> sc:member <https://rubrica.unige.it/personale/VUZEWF1r> .
+
+# Definizione della persona <https://rubrica.unige.it/personale/VUZBXFlr>
+<https://rubrica.unige.it/personale/VUZBXFlr> rdf:type sc:Person .
+<https://rubrica.unige.it/personale/VUZBXFlr> sc:givenName "Ilaria" .
+<https://rubrica.unige.it/personale/VUZBXFlr> sc:familyName "Torre" .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZBXFlr> all'occupazione <https://rubrica.unige.it/ruoli/PA>
+<https://rubrica.unige.it/personale/VUZBXFlr> sc:hasOccupation <https://rubrica.unige.it/ruoli/PA> .
+<https://rubrica.unige.it/ruoli/PA> sc:hasOccupation <https://rubrica.unige.it/personale/VUZBXFlr> .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZBXFlr> all'edificio <https://rubrica.unige.it/edifici/ED_161450201>
+<https://rubrica.unige.it/personale/VUZBXFlr> sc:affiliation <https://rubrica.unige.it/edifici/ED_161450201> .
+<https://rubrica.unige.it/edifici/ED_161450201> sc:employee <https://rubrica.unige.it/personale/VUZBXFlr> .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZBXFlr> al dipartimento <https://rubrica.unige.it/strutture/struttura/100023>
+<https://rubrica.unige.it/personale/VUZBXFlr> sc:worksFor <https://rubrica.unige.it/strutture/struttura/100023> .
+<https://rubrica.unige.it/strutture/struttura/100023> sc:employee <https://rubrica.unige.it/personale/VUZBXFlr> .
+
+# Definizione del contatto ug:Torre_Contacts
+ug:Torre_Contacts rdf:type sc:ContactPoint .
+ug:Torre_Contacts sc:email "ilaria.torre@unige.it" .
+ug:Torre_Contacts sc:telephone "+390103352818" .
+ug:Torre_Contacts sc:contactType "Contatti Dibris Torre" .
+ug:Torre_Contacts sc:areaServed "Villa Bonino" .
+ug:Torre_Contacts ug:roomCode "T.019" .
+
+# Definizione dell'url <https://rubrica.unige.it/spazi/planimetrie/US_161450201.T.019>
+<https://rubrica.unige.it/spazi/planimetrie/US_161450201.T.019> rdf:type sc:URL .
+<https://rubrica.unige.it/spazi/planimetrie/US_161450201.T.019> ug:link "https://rubrica.unige.it/spazi/planimetrie/US_161450201.T.019" .
+<https://rubrica.unige.it/spazi/planimetrie/US_161450201.T.019> sc:description "Planimetria stanza T.019" .
+
+# Assegnazione del contatto ug:Torre_Contacts all'url <https://rubrica.unige.it/spazi/planimetrie/US_161450201.T.019>
+ug:Torre_Contacts sc:url <https://rubrica.unige.it/spazi/planimetrie/US_161450201.T.019> .
+<https://rubrica.unige.it/spazi/planimetrie/US_161450201.T.019> sc:url ug:Torre_Contacts .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZBXFlr> al contatto ug:Torre_Contacts
+<https://rubrica.unige.it/personale/VUZBXFlr> sc:contactPoint ug:Torre_Contacts .
+ug:Torre_Contacts sc:contactPoint <https://rubrica.unige.it/personale/VUZBXFlr> .
+
+# Definizione dell'url <https://cpc-prod.csita.unige.it/output_cv/UEVAWFg%253D/cv_en.pdf?ts=1645113043>
+<https://cpc-prod.csita.unige.it/output_cv/UEVAWFg%253D/cv_en.pdf?ts=1645113043> rdf:type sc:URL .
+<https://cpc-prod.csita.unige.it/output_cv/UEVAWFg%253D/cv_en.pdf?ts=1645113043> ug:link "https://cpc-prod.csita.unige.it/output_cv/UEVAWFg%253D/cv_en.pdf?ts=1645113043" .
+<https://cpc-prod.csita.unige.it/output_cv/UEVAWFg%253D/cv_en.pdf?ts=1645113043> sc:description "CV inglese Torre" .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZBXFlr> all'url <https://cpc-prod.csita.unige.it/output_cv/UEVAWFg%253D/cv_en.pdf?ts=1645113043>
+<https://rubrica.unige.it/personale/VUZBXFlr> sc:url <https://cpc-prod.csita.unige.it/output_cv/UEVAWFg%253D/cv_en.pdf?ts=1645113043> .
+<https://cpc-prod.csita.unige.it/output_cv/UEVAWFg%253D/cv_en.pdf?ts=1645113043> sc:url <https://rubrica.unige.it/personale/VUZBXFlr> .
+
+# Definizione dell'immagine ug:No_Immagine
+ug:No_Immagine rdf:type sc:ImageObject .
+ug:No_Immagine sc:caption "Nessuna Immagine" .
+ug:No_Immagine sc:encodingFormat "jpg" .
+ug:No_Immagine sc:height "500"^^xsd:int .
+ug:No_Immagine sc:width "500"^^xsd:int .
+
+# Definizione dell'url <https://rubrica.unige.it/static/img/foto.jpg>
+<https://rubrica.unige.it/static/img/foto.jpg> rdf:type sc:URL .
+<https://rubrica.unige.it/static/img/foto.jpg> ug:link "https://rubrica.unige.it/static/img/foto.jpg" .
+<https://rubrica.unige.it/static/img/foto.jpg> sc:description "Nessuna immagine" .
+
+# Assegnazione dell'immagine ug:No_Immagine all'url <https://rubrica.unige.it/static/img/foto.jpg>
+ug:No_Immagine sc:url <https://rubrica.unige.it/static/img/foto.jpg> .
+<https://rubrica.unige.it/static/img/foto.jpg> sc:url ug:No_Immagine .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZBXFlr> all'immagine ug:No_Immagine
+<https://rubrica.unige.it/personale/VUZBXFlr> sc:image ug:No_Immagine .
+ug:No_Immagine sc:image <https://rubrica.unige.it/personale/VUZBXFlr> .
+
+# Definizione del ssd <https://rubrica.unige.it/ssd/INF/01>
+<https://rubrica.unige.it/ssd/INF/01> rdf:type ug:Ssd .
+<https://rubrica.unige.it/ssd/INF/01> sc:legalName "INFORMATICA" .
+<https://rubrica.unige.it/ssd/INF/01> sc:branchCode "INF/01" .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZBXFlr> al ssd <https://rubrica.unige.it/ssd/INF/01>
+<https://rubrica.unige.it/personale/VUZBXFlr> sc:member <https://rubrica.unige.it/ssd/INF/01> .
+<https://rubrica.unige.it/ssd/INF/01> sc:member <https://rubrica.unige.it/personale/VUZBXFlr> .
+
+# Definizione della persona <https://rubrica.unige.it/personale/VUZDWVlh>
+<https://rubrica.unige.it/personale/VUZDWVlh> rdf:type sc:Person .
+<https://rubrica.unige.it/personale/VUZDWVlh> sc:givenName "Sergio" .
+<https://rubrica.unige.it/personale/VUZDWVlh> sc:familyName "Martinoia" .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZDWVlh> all'occupazione <https://rubrica.unige.it/ruoli/PO>
+<https://rubrica.unige.it/personale/VUZDWVlh> sc:hasOccupation <https://rubrica.unige.it/ruoli/PO> .
+<https://rubrica.unige.it/ruoli/PO> sc:hasOccupation <https://rubrica.unige.it/personale/VUZDWVlh> .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZDWVlh> al dipartimento <https://rubrica.unige.it/strutture/struttura/100023>
+<https://rubrica.unige.it/personale/VUZDWVlh> sc:worksFor <https://rubrica.unige.it/strutture/struttura/100023> .
+<https://rubrica.unige.it/strutture/struttura/100023> sc:employee <https://rubrica.unige.it/personale/VUZDWVlh> .
+
+# Definizione dell'incarico ug:Direttore_di_Dipartimento
+ug:Direttore_di_Dipartimento rdf:type sc:Role .
+ug:Direttore_di_Dipartimento sc:roleName "Direttore di Dipartimento" .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZDWVlh> all'incarico ug:Direttore_di_Dipartimento
+<https://rubrica.unige.it/personale/VUZDWVlh> ug:assignment ug:Direttore_di_Dipartimento .
+ug:Direttore_di_Dipartimento ug:assignment <https://rubrica.unige.it/personale/VUZDWVlh> .
+
+# Definizione del contatto ug:Martinoia_Contacts
+ug:Martinoia_Contacts rdf:type sc:ContactPoint .
+ug:Martinoia_Contacts sc:email "sergio.martinoia@unige.it" .
+ug:Martinoia_Contacts sc:telephone "+390103352980" .
+ug:Martinoia_Contacts sc:contactType "Contatti Martinoia" .
+ug:Martinoia_Contacts sc:areaServed "Opera Pia - padiglione E" .
+ug:Martinoia_Contacts ug:roomCode "III.002" .
+
+# Definizione dell'url <https://rubrica.unige.it/spazi/planimetrie/US_161450402.III.002>
+<https://rubrica.unige.it/spazi/planimetrie/US_161450402.III.002> rdf:type sc:URL .
+<https://rubrica.unige.it/spazi/planimetrie/US_161450402.III.002> ug:link "https://rubrica.unige.it/spazi/planimetrie/US_161450402.III.002" .
+<https://rubrica.unige.it/spazi/planimetrie/US_161450402.III.002> sc:description "Planimetria stanza III.002" .
+
+# Assegnazione del contatto ug:Martinoia_Contacts all'url <https://rubrica.unige.it/spazi/planimetrie/US_161450402.III.002>
+ug:Martinoia_Contacts sc:url <https://rubrica.unige.it/spazi/planimetrie/US_161450402.III.002> .
+<https://rubrica.unige.it/spazi/planimetrie/US_161450402.III.002> sc:url ug:Martinoia_Contacts .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZDWVlh> al contatto ug:Martinoia_Contacts
+<https://rubrica.unige.it/personale/VUZDWVlh> sc:contactPoint ug:Martinoia_Contacts .
+ug:Martinoia_Contacts sc:contactPoint <https://rubrica.unige.it/personale/VUZDWVlh> .
+
+# Definizione dell'url <https://cpc-prod.csita.unige.it/output_cv/UEdFWFI%253D/cv_en.pdf?ts=1645282283>
+<https://cpc-prod.csita.unige.it/output_cv/UEdFWFI%253D/cv_en.pdf?ts=1645282283> rdf:type sc:URL .
+<https://cpc-prod.csita.unige.it/output_cv/UEdFWFI%253D/cv_en.pdf?ts=1645282283> ug:link "https://cpc-prod.csita.unige.it/output_cv/UEdFWFI%253D/cv_en.pdf?ts=1645282283" .
+<https://cpc-prod.csita.unige.it/output_cv/UEdFWFI%253D/cv_en.pdf?ts=1645282283> sc:description "CV Inglese Martinoia" .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZDWVlh> all'url <https://cpc-prod.csita.unige.it/output_cv/UEdFWFI%253D/cv_en.pdf?ts=1645282283>
+<https://rubrica.unige.it/personale/VUZDWVlh> sc:url <https://cpc-prod.csita.unige.it/output_cv/UEdFWFI%253D/cv_en.pdf?ts=1645282283> .
+<https://cpc-prod.csita.unige.it/output_cv/UEdFWFI%253D/cv_en.pdf?ts=1645282283> sc:url <https://rubrica.unige.it/personale/VUZDWVlh> .
+
+# Definizione dell'immagine ug:Martinoia_Immagine
+ug:Martinoia_Immagine rdf:type sc:ImageObject .
+ug:Martinoia_Immagine sc:caption "Immagine Martinoia" .
+ug:Martinoia_Immagine sc:encodingFormat "jpg" .
+ug:Martinoia_Immagine sc:height "500"^^xsd:int .
+ug:Martinoia_Immagine sc:width "500"^^xsd:int .
+
+# Definizione dell'url <https://rubrica.unige.it/static/foto/VUZDWVlh.jpg?1645282283.4488>
+<https://rubrica.unige.it/static/foto/VUZDWVlh.jpg?1645282283.4488> rdf:type sc:URL .
+<https://rubrica.unige.it/static/foto/VUZDWVlh.jpg?1645282283.4488> ug:link "https://rubrica.unige.it/static/foto/VUZDWVlh.jpg?1645282283.4488" .
+<https://rubrica.unige.it/static/foto/VUZDWVlh.jpg?1645282283.4488> sc:description "Immagine Martinoia" .
+
+# Assegnazione dell'immagine ug:Martinoia_Immagine all'url <https://rubrica.unige.it/static/foto/VUZDWVlh.jpg?1645282283.4488>
+ug:Martinoia_Immagine sc:url <https://rubrica.unige.it/static/foto/VUZDWVlh.jpg?1645282283.4488> .
+<https://rubrica.unige.it/static/foto/VUZDWVlh.jpg?1645282283.4488> sc:url ug:Martinoia_Immagine .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZDWVlh> all'immagine ug:Martinoia_Immagine
+<https://rubrica.unige.it/personale/VUZDWVlh> sc:image ug:Martinoia_Immagine .
+ug:Martinoia_Immagine sc:image <https://rubrica.unige.it/personale/VUZDWVlh> .
+
+# Definizione del ssd <https://rubrica.unige.it/ssd/ING-INF/06>
+<https://rubrica.unige.it/ssd/ING-INF/06> rdf:type ug:Ssd .
+<https://rubrica.unige.it/ssd/ING-INF/06> sc:legalName "BIOINGEGNERIA ELETTRONICA E INFORMATICA" .
+<https://rubrica.unige.it/ssd/ING-INF/06> sc:branchCode "ING-INF/06" .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZDWVlh> al ssd <https://rubrica.unige.it/ssd/ING-INF/06>
+<https://rubrica.unige.it/personale/VUZDWVlh> sc:member <https://rubrica.unige.it/ssd/ING-INF/06> .
+<https://rubrica.unige.it/ssd/ING-INF/06> sc:member <https://rubrica.unige.it/personale/VUZDWVlh> .
+
+# Definizione della persona <https://rubrica.unige.it/personale/UkNHW1pu>
+<https://rubrica.unige.it/personale/UkNHW1pu> rdf:type sc:Person .
+<https://rubrica.unige.it/personale/UkNHW1pu> sc:givenName "Francesca" .
+<https://rubrica.unige.it/personale/UkNHW1pu> sc:familyName "Odone" .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/UkNHW1pu> all'occupazione <https://rubrica.unige.it/ruoli/PO>
+<https://rubrica.unige.it/personale/UkNHW1pu> sc:hasOccupation <https://rubrica.unige.it/ruoli/PO> .
+<https://rubrica.unige.it/ruoli/PO> sc:hasOccupation <https://rubrica.unige.it/personale/UkNHW1pu> .
+
+# Definizione dell'edificio <https://rubrica.unige.it/edifici/ED_161460103>
+<https://rubrica.unige.it/edifici/ED_161460103> rdf:type ug:CollegeOrUniversityBuilding .
+<https://rubrica.unige.it/edifici/ED_161460103> sc:name "Valletta Puggia - DIBRIS-DIMA" .
+
+# Definizione dell'indirizzo ug:Via_Dodecaneso
+ug:Via_Dodecaneso rdf:type ug:PostalAddress .
+ug:Via_Dodecaneso sc:addressLocality "GENOVA" .
+ug:Via_Dodecaneso sc:streetAddress "Via Dodecaneso 35" .
+ug:Via_Dodecaneso sc:postalCode "16146" .
+
+# Assegnazione dell'edificio <https://rubrica.unige.it/edifici/ED_161460103> all'indirizzo ug:Via_Dodecaneso
+<https://rubrica.unige.it/edifici/ED_161460103> sc:address ug:Via_Dodecaneso .
+ug:Via_Dodecaneso sc:address <https://rubrica.unige.it/edifici/ED_161460103> .
+
+# Definizione della coordinata geo ug:Valletta_Puggia_DIBRIS_DIMA_Geopoint
+ug:Valletta_Puggia_DIBRIS_DIMA_Geopoint rdf:type geo:Point .
+ug:Valletta_Puggia_DIBRIS_DIMA_Geopoint sc:lat "44.4014503"^^xsd:float .
+ug:Valletta_Puggia_DIBRIS_DIMA_Geopoint sc:long "8.9690793"^^xsd:float .
+
+# Assegnazione dell'edificio <https://rubrica.unige.it/edifici/ED_161460103> alle coordinate geo ug:Valletta_Puggia_DIBRIS_DIMA_Geopoint
+<https://rubrica.unige.it/edifici/ED_161460103> ug:geo ug:Valletta_Puggia_DIBRIS_DIMA_Geopoint .
+ug:Valletta_Puggia_DIBRIS_DIMA_Geopoint ug:geo <https://rubrica.unige.it/edifici/ED_161460103> .
+
+# Assegnazione del dipartimento <https://rubrica.unige.it/strutture/struttura/100023> all'edificio <https://rubrica.unige.it/edifici/ED_161460103>
+<https://rubrica.unige.it/strutture/struttura/100023> sc:department <https://rubrica.unige.it/edifici/ED_161460103> .
+<https://rubrica.unige.it/edifici/ED_161460103> sc:department <https://rubrica.unige.it/strutture/struttura/100023> .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/UkNHW1pu> all'edificio <https://rubrica.unige.it/edifici/ED_161460103>
+<https://rubrica.unige.it/personale/UkNHW1pu> sc:employee <https://rubrica.unige.it/edifici/ED_161460103> .
+<https://rubrica.unige.it/edifici/ED_161460103> sc:affiliation <https://rubrica.unige.it/personale/UkNHW1pu> .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/UkNHW1pu> al dipartimento <https://rubrica.unige.it/strutture/struttura/100023>
+<https://rubrica.unige.it/personale/UkNHW1pu> sc:worksFor <https://rubrica.unige.it/strutture/struttura/100023> .
+<https://rubrica.unige.it/strutture/struttura/100023> sc:employee <https://rubrica.unige.it/personale/UkNHW1pu> .
+
+# Definizione dell'incarico ug:Vice_Direttore_di_Dipartimento
+ug:Vice_Direttore_di_Dipartimento rdf:type sc:Role .
+ug:Vice_Direttore_di_Dipartimento sc:roleName "Vice Direttore di Dipartimento" .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/UkNHW1pu> all'incarico ug:Vice_Direttore_di_Dipartimento
+<https://rubrica.unige.it/personale/UkNHW1pu> ug:assignment ug:Vice_Direttore_di_Dipartimento .
+ug:Vice_Direttore_di_Dipartimento ug:assignment <https://rubrica.unige.it/personale/UkNHW1pu> .
+
+# Definizione del contatto ug:Odone_Contacts
+ug:Odone_Contacts rdf:type sc:ContactPoint .
+ug:Odone_Contacts sc:email "francesca.odone@unige.it" .
+ug:Odone_Contacts sc:telephone "+390103536667" .
+ug:Odone_Contacts sc:contactType "Contatti Odone" .
+ug:Odone_Contacts sc:areaServed "Valletta Puggia - DIBRIS-DIMA" .
+ug:Odone_Contacts ug:roomCode "III.046" .
+
+# Definizione dell'url <https://rubrica.unige.it/spazi/planimetrie/US_161460103.III.046>
+<https://rubrica.unige.it/spazi/planimetrie/US_161460103.III.046> rdf:type sc:URL .
+<https://rubrica.unige.it/spazi/planimetrie/US_161460103.III.046> ug:link "https://rubrica.unige.it/spazi/planimetrie/US_161460103.III.046" .
+<https://rubrica.unige.it/spazi/planimetrie/US_161460103.III.046> sc:description "Planimetria stanza III.046" .
+
+# Assegnazione del contatto ug:Odone_Contacts all'url <https://rubrica.unige.it/spazi/planimetrie/US_161460103.III.046>
+ug:Odone_Contacts sc:url <https://rubrica.unige.it/spazi/planimetrie/US_161460103.III.046> .
+<https://rubrica.unige.it/spazi/planimetrie/US_161460103.III.046> sc:url ug:Odone_Contacts .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/UkNHW1pu> al contatto ug:Odone_Contacts
+<https://rubrica.unige.it/personale/UkNHW1pu> sc:contactPoint ug:Odone_Contacts .
+ug:Odone_Contacts sc:contactPoint <https://rubrica.unige.it/personale/UkNHW1pu> .
+
+# Definizione dell'url <https://cpc-prod.csita.unige.it/output_cv/UkNHW1pu/cv_en.pdf?ts=1645283040>
+<https://cpc-prod.csita.unige.it/output_cv/UkNHW1pu/cv_en.pdf?ts=1645283040> rdf:type sc:URL .
+<https://cpc-prod.csita.unige.it/output_cv/UkNHW1pu/cv_en.pdf?ts=1645283040> ug:link "https://cpc-prod.csita.unige.it/output_cv/UkNHW1pu/cv_en.pdf?ts=1645283040" .
+<https://cpc-prod.csita.unige.it/output_cv/UkNHW1pu/cv_en.pdf?ts=1645283040> sc:description "CV Inglese Odone" .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/UkNHW1pu> all'url <https://cpc-prod.csita.unige.it/output_cv/UkNHW1pu/cv_en.pdf?ts=1645283040>
+<https://rubrica.unige.it/personale/UkNHW1pu> sc:url <https://cpc-prod.csita.unige.it/output_cv/UkNHW1pu/cv_en.pdf?ts=1645283040> .
+<https://cpc-prod.csita.unige.it/output_cv/UkNHW1pu/cv_en.pdf?ts=1645283040> sc:url <https://rubrica.unige.it/personale/UkNHW1pu> .
+
+# Definizione dell'immagine ug:Odone_Immagine
+ug:Odone_Immagine rdf:type sc:ImageObject .
+ug:Odone_Immagine sc:caption "Foto Odone" .
+ug:Odone_Immagine sc:encodingFormat "jpg" .
+ug:Odone_Immagine sc:height "500"^^xsd:int .
+ug:Odone_Immagine sc:width "500"^^xsd:int .
+
+# Definizione dell'url <https://rubrica.unige.it/static/foto/UkNHW1pu.jpg?1645283040.9577>
+<https://rubrica.unige.it/static/foto/UkNHW1pu.jpg?1645283040.9577> rdf:type sc:URL .
+<https://rubrica.unige.it/static/foto/UkNHW1pu.jpg?1645283040.9577> ug:link "https://rubrica.unige.it/static/foto/UkNHW1pu.jpg?1645283040.9577" .
+<https://rubrica.unige.it/static/foto/UkNHW1pu.jpg?1645283040.9577> sc:description "Immagine Odone" .
+
+# Assegnazione dell'immagine ug:Odone_Immagine all'url <https://rubrica.unige.it/static/foto/UkNHW1pu.jpg?1645283040.9577>
+ug:Odone_Immagine sc:url <https://rubrica.unige.it/static/foto/UkNHW1pu.jpg?1645283040.9577> .
+<https://rubrica.unige.it/static/foto/UkNHW1pu.jpg?1645283040.9577> sc:url ug:Odone_Immagine .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/UkNHW1pu> all'immagine ug:Odone_Immagine
+<https://rubrica.unige.it/personale/UkNHW1pu> sc:image ug:Odone_Immagine .
+ug:Odone_Immagine sc:image <https://rubrica.unige.it/personale/UkNHW1pu> .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/UkNHW1pu> al ssd <https://rubrica.unige.it/ssd/INF/01>
+<https://rubrica.unige.it/personale/UkNHW1pu> sc:member <https://rubrica.unige.it/ssd/INF/01> .
+<https://rubrica.unige.it/ssd/INF/01> sc:member <https://rubrica.unige.it/personale/UkNHW1pu> .
+
+# Definizione della persona <https://rubrica.unige.it/personale/VUdBU1Jt>
+<https://rubrica.unige.it/personale/VUdBU1Jt> rdf:type sc:Person .
+<https://rubrica.unige.it/personale/VUdBU1Jt> sc:givenName "Lorella" .
+<https://rubrica.unige.it/personale/VUdBU1Jt> sc:familyName "Vongher" .
+
+# Definizione dell'occupazione <https://rubrica.unige.it/ruoli/TA>
+<https://rubrica.unige.it/ruoli/TA> rdf:type sc:Occupation .
+<https://rubrica.unige.it/ruoli/TA> sc:qualifications "Personale tecnico amministrativo" .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUdBU1Jt> all'occupazione <https://rubrica.unige.it/ruoli/TA>
+<https://rubrica.unige.it/personale/VUdBU1Jt> sc:hasOccupation <https://rubrica.unige.it/ruoli/TA> .
+<https://rubrica.unige.it/ruoli/TA> sc:hasOccupation <https://rubrica.unige.it/personale/VUdBU1Jt> .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUdBU1Jt> all'edificio <https://rubrica.unige.it/edifici/ED_161450201>
+<https://rubrica.unige.it/personale/VUdBU1Jt> sc:affiliation <https://rubrica.unige.it/edifici/ED_161450201> .
+<https://rubrica.unige.it/edifici/ED_161450201> sc:employee <https://rubrica.unige.it/personale/VUdBU1Jt> .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUdBU1Jt> al dipartimento <https://rubrica.unige.it/strutture/struttura/100023>
+<https://rubrica.unige.it/personale/VUdBU1Jt> sc:worksFor <https://rubrica.unige.it/strutture/struttura/100023> .
+<https://rubrica.unige.it/strutture/struttura/100023> sc:employee <https://rubrica.unige.it/personale/VUdBU1Jt> .
+
+# Definizione dell'incarico ug:Responsabile_amministrativo
+ug:Responsabile_amministrativo rdf:type sc:Role .
+ug:Responsabile_amministrativo sc:roleName "Responsabile amministrativo" .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUdBU1Jt> all'incarico ug:Responsabile_amministrativo
+<https://rubrica.unige.it/personale/VUdBU1Jt> ug:assignment ug:Responsabile_amministrativo .
+ug:Responsabile_amministrativo ug:assignment <https://rubrica.unige.it/personale/VUdBU1Jt> .
+
+# Definizione del contatto ug:Vongher_Contacts
+ug:Vongher_Contacts rdf:type sc:ContactPoint .
+ug:Vongher_Contacts sc:email "lorella.vongher@unige.it" .
+ug:Vongher_Contacts sc:telephone "+390103352810" .
+ug:Vongher_Contacts sc:contactType "Contatti Vongher" .
+ug:Vongher_Contacts sc:areaServed "Villa Bonino" .
+ug:Vongher_Contacts ug:roomCode "I.007" .
+
+# Definizione dell'url <https://rubrica.unige.it/spazi/planimetrie/US_161450201.I.007>
+<https://rubrica.unige.it/spazi/planimetrie/US_161450201.I.007> rdf:type sc:URL .
+<https://rubrica.unige.it/spazi/planimetrie/US_161450201.I.007> ug:link "https://rubrica.unige.it/spazi/planimetrie/US_161450201.I.007" .
+<https://rubrica.unige.it/spazi/planimetrie/US_161450201.I.007> sc:description "Planimetria stanza I.007" .
+
+# Assegnazione del contatto ug:Vongher_Contacts all'url <https://rubrica.unige.it/spazi/planimetrie/US_161450201.I.007>
+ug:Vongher_Contacts sc:url <https://rubrica.unige.it/spazi/planimetrie/US_161450201.I.007> .
+<https://rubrica.unige.it/spazi/planimetrie/US_161450201.I.007> sc:url ug:Vongher_Contacts .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUdBU1Jt> al contatto ug:Vongher_Contacts
+<https://rubrica.unige.it/personale/VUdBU1Jt> sc:contactPoint ug:Vongher_Contacts .
+ug:Vongher_Contacts sc:contactPoint <https://rubrica.unige.it/personale/VUdBU1Jt> .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUdBU1Jt> all'immagine ug:No_Immagine
+<https://rubrica.unige.it/personale/VUdBU1Jt> sc:image ug:No_Immagine .
+ug:No_Immagine sc:image <https://rubrica.unige.it/personale/VUdBU1Jt> .
+
+# Definizione della persona <https://rubrica.unige.it/personale/VUZEWFxh>
+<https://rubrica.unige.it/personale/VUZEWFxh> rdf:type sc:Person .
+<https://rubrica.unige.it/personale/VUZEWFxh> sc:givenName "Alessandro" .
+<https://rubrica.unige.it/personale/VUZEWFxh> sc:familyName "Pozzi" .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZEWFxh> all'occupazione <https://rubrica.unige.it/ruoli/TA>
+<https://rubrica.unige.it/personale/VUZEWFxh> sc:hasOccupation <https://rubrica.unige.it/ruoli/TA> .
+<https://rubrica.unige.it/ruoli/TA> sc:hasOccupation <https://rubrica.unige.it/personale/VUZEWFxh> .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZEWFxh> all'edificio <https://rubrica.unige.it/edifici/ED_161450402>
+<https://rubrica.unige.it/personale/VUZEWFxh> sc:affiliation <https://rubrica.unige.it/edifici/ED_161450402> .
+<https://rubrica.unige.it/edifici/ED_161450402> sc:employee <https://rubrica.unige.it/personale/VUZEWFxh> .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZEWFxh> al dipartimento <https://rubrica.unige.it/strutture/struttura/100023>
+<https://rubrica.unige.it/personale/VUZEWFxh> sc:worksFor <https://rubrica.unige.it/strutture/struttura/100023> .
+<https://rubrica.unige.it/strutture/struttura/100023> sc:employee <https://rubrica.unige.it/personale/VUZEWFxh> .
+
+# Definizione dell'incarico ug:Coordinatore_tecnico
+ug:Coordinatore_tecnico rdf:type sc:Role .
+ug:Coordinatore_tecnico sc:roleName "Coordinatore tecnico" .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZEWFxh> all'incarico ug:Responsabile_amministrativo
+<https://rubrica.unige.it/personale/VUZEWFxh> ug:assignment ug:Coordinatore_tecnico .
+ug:Coordinatore_tecnico ug:assignment <https://rubrica.unige.it/personale/VUZEWFxh> .
+
+# Definizione del contatto ug:Pozzi_Contacts
+ug:Pozzi_Contacts rdf:type sc:ContactPoint .
+ug:Pozzi_Contacts sc:email "alessandro.pozzi@unige.it" .
+ug:Pozzi_Contacts sc:telephone "+390103536635" .
+ug:Pozzi_Contacts sc:contactType "Contatti Pozzi" .
+ug:Pozzi_Contacts sc:areaServed "Opera Pia - padiglione E" .
+ug:Pozzi_Contacts ug:roomCode "IV.014" .
+
+# Definizione dell'url <https://rubrica.unige.it/spazi/planimetrie/US_161450402.IV.014>
+<https://rubrica.unige.it/spazi/planimetrie/US_161450402.IV.014> rdf:type sc:URL .
+<https://rubrica.unige.it/spazi/planimetrie/US_161450402.IV.014> ug:link "https://rubrica.unige.it/spazi/planimetrie/US_161450402.IV.014" .
+<https://rubrica.unige.it/spazi/planimetrie/US_161450402.IV.014> sc:description "Planimetria stanza IV.014" .
+
+# Assegnazione del contatto ug:Pozzi_Contacts all'url <https://rubrica.unige.it/spazi/planimetrie/US_161450402.IV.014>
+ug:Pozzi_Contacts sc:url <https://rubrica.unige.it/spazi/planimetrie/US_161450402.IV.014> .
+<https://rubrica.unige.it/spazi/planimetrie/US_161450402.IV.014> sc:url ug:Pozzi_Contacts .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZEWFxh> al contatto ug:Pozzi_Contacts
+<https://rubrica.unige.it/personale/VUZEWFxh> sc:contactPoint ug:Pozzi_Contacts .
+ug:Pozzi_Contacts sc:contactPoint <https://rubrica.unige.it/personale/VUZEWFxh> .
+
+# Definizione dell'immagine ug:Pozzi_Immagine
+ug:Pozzi_Immagine rdf:type sc:ImageObject .
+ug:Pozzi_Immagine sc:caption "Immagine Pozzi" .
+ug:Pozzi_Immagine sc:encodingFormat "jpg" .
+ug:Pozzi_Immagine sc:height "500"^^xsd:int .
+ug:Pozzi_Immagine sc:width "500"^^xsd:int .
+
+# Definizione dell'url <https://rubrica.unige.it/static/foto/VUZEWFxh.jpg?1645285790.6956>
+<https://rubrica.unige.it/static/foto/VUZEWFxh.jpg?1645285790.6956> rdf:type sc:URL .
+<https://rubrica.unige.it/static/foto/VUZEWFxh.jpg?1645285790.6956> ug:link "https://rubrica.unige.it/static/foto/VUZEWFxh.jpg?1645285790.6956" .
+<https://rubrica.unige.it/static/foto/VUZEWFxh.jpg?1645285790.6956> sc:description "foto Pozzi" .
+
+# Assegnazione dell'immagine ug:Pozzi_Immagine all'url <https://rubrica.unige.it/static/foto/VUZEWFxh.jpg?1645285790.6956>
+ug:Pozzi_Immagine sc:url <https://rubrica.unige.it/static/foto/VUZEWFxh.jpg?1645285790.6956> .
+<https://rubrica.unige.it/static/foto/VUZEWFxh.jpg?1645285790.6956> sc:url ug:Pozzi_Immagine .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/VUZEWFxh> all'immagine ug:Pozzi_Immagine
+<https://rubrica.unige.it/personale/VUZEWFxh> sc:image ug:Pozzi_Immagine .
+ug:Pozzi_Immagine sc:image <https://rubrica.unige.it/personale/VUZEWFxh> .
+
+# Definizione della persona <https://rubrica.unige.it/personale/UkNHU1hq>
+<https://rubrica.unige.it/personale/UkNHU1hq> rdf:type sc:Person .
+<https://rubrica.unige.it/personale/UkNHU1hq> sc:givenName "Elena" .
+<https://rubrica.unige.it/personale/UkNHU1hq> sc:familyName "Tortora" .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/UkNHU1hq> all'occupazione <https://rubrica.unige.it/ruoli/TA>
+<https://rubrica.unige.it/personale/UkNHU1hq> sc:hasOccupation <https://rubrica.unige.it/ruoli/TA> .
+<https://rubrica.unige.it/ruoli/TA> sc:hasOccupation <https://rubrica.unige.it/personale/UkNHU1hq> .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/UkNHU1hq> all'edificio <https://rubrica.unige.it/edifici/ED_161450201>
+<https://rubrica.unige.it/personale/UkNHU1hq> sc:affiliation <https://rubrica.unige.it/edifici/ED_161450201> .
+<https://rubrica.unige.it/edifici/ED_161450201> sc:employee <https://rubrica.unige.it/personale/UkNHU1hq> .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/UkNHU1hq> al dipartimento <https://rubrica.unige.it/strutture/struttura/100023>
+<https://rubrica.unige.it/personale/UkNHU1hq> sc:worksFor <https://rubrica.unige.it/strutture/struttura/100023> .
+<https://rubrica.unige.it/strutture/struttura/100023> sc:employee <https://rubrica.unige.it/personale/UkNHU1hq> .
+
+# Definizione dell'incarico ug:Referente_per_la_didattiva
+ug:Referente_per_la_didattiva rdf:type sc:Role .
+ug:Referente_per_la_didattiva sc:roleName "Referente per la didattica" .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/UkNHU1hq> all'incarico ug:Referente_per_la_didattiva
+<https://rubrica.unige.it/personale/UkNHU1hq> ug:assignment ug:Referente_per_la_didattiva .
+ug:Referente_per_la_didattiva ug:assignment <https://rubrica.unige.it/personale/UkNHU1hq> .
+
+# Definizione del contatto ug:Tortora_Contacts
+ug:Tortora_Contacts rdf:type sc:ContactPoint .
+ug:Tortora_Contacts sc:email "elena.tortora@unige.it" .
+ug:Tortora_Contacts sc:telephone "+390103352945" .
+ug:Tortora_Contacts sc:contactType "Contatti Tortora" .
+ug:Tortora_Contacts sc:areaServed "Villa Bonino" .
+ug:Tortora_Contacts ug:roomCode "I.006" .
+
+# Definizione dell'url <https://rubrica.unige.it/spazi/planimetrie/US_161450201.I.006>
+<https://rubrica.unige.it/spazi/planimetrie/US_161450201.I.006> rdf:type sc:URL .
+<https://rubrica.unige.it/spazi/planimetrie/US_161450201.I.006> ug:link "https://rubrica.unige.it/spazi/planimetrie/US_161450201.I.006" .
+<https://rubrica.unige.it/spazi/planimetrie/US_161450201.I.006> sc:description "Planimetria stanza I.006" .
+
+# Assegnazione del contatto ug:Tortora_Contacts all'url <https://rubrica.unige.it/spazi/planimetrie/US_161450201.I.006>
+ug:Tortora_Contacts sc:url <https://rubrica.unige.it/spazi/planimetrie/US_161450201.I.006> .
+<https://rubrica.unige.it/spazi/planimetrie/US_161450201.I.006> sc:url ug:Tortora_Contacts .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/UkNHU1hq> al contatto ug:Tortora_Contacts
+<https://rubrica.unige.it/personale/UkNHU1hq> sc:contactPoint ug:Tortora_Contacts .
+ug:Tortora_Contacts sc:contactPoint <https://rubrica.unige.it/personale/UkNHU1hq> .
+
+# Definizione dell'immagine ug:Tortora_Immagine
+ug:Tortora_Immagine rdf:type sc:ImageObject .
+ug:Tortora_Immagine sc:caption "Foto Tortora" .
+ug:Tortora_Immagine sc:encodingFormat "jpg" .
+ug:Tortora_Immagine sc:height "500"^^xsd:int .
+ug:Tortora_Immagine sc:width "500"^^xsd:int .
+
+# Definizione dell'url <https://rubrica.unige.it/static/foto/UkNHU1hq.jpg?1645286450.1095>
+<https://rubrica.unige.it/static/foto/UkNHU1hq.jpg?1645286450.1095> rdf:type sc:URL .
+<https://rubrica.unige.it/static/foto/UkNHU1hq.jpg?1645286450.1095> ug:link "https://rubrica.unige.it/static/foto/UkNHU1hq.jpg?1645286450.1095" .
+<https://rubrica.unige.it/static/foto/UkNHU1hq.jpg?1645286450.1095> sc:description "Url foto Tortora" .
+
+# Assegnazione dell'immagine ug:Tortora_Immagine all'url <https://rubrica.unige.it/static/foto/UkNHU1hq.jpg?1645286450.1095>
+ug:Tortora_Immagine sc:url <https://rubrica.unige.it/static/foto/UkNHU1hq.jpg?1645286450.1095> .
+<https://rubrica.unige.it/static/foto/UkNHU1hq.jpg?1645286450.1095> sc:url ug:Tortora_Immagine .
+
+# Assegnazione della persona <https://rubrica.unige.it/personale/UkNHU1hq> all'immagine ug:Tortora_Immagine
+<https://rubrica.unige.it/personale/UkNHU1hq> sc:image ug:Tortora_Immagine .
+ug:Tortora_Immagine sc:image <https://rubrica.unige.it/personale/UkNHU1hq> .

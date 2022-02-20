@@ -32,9 +32,12 @@ WHERE
   ?contatto sc:telephone ?telefono .
   OPTIONAL { ?contatto sc:email ?email } .
   OPTIONAL { ?contatto ug:roomCode ?stanza } .
-  ?contatto sc:areaServed ?area .
-  ?contatto sc:url ?url_planimetria .
-  ?url_planimetria ug:link ?planimetria .
+  OPTIONAL
+  {
+    ?contatto sc:areaServed ?area .
+    ?contatto sc:url ?url_planimetria .
+    ?url_planimetria ug:link ?planimetria .
+  }
   FILTER (?nome_edificio = \"""" + edificio + """\" && ?area = \"""" + edificio + """\")
 }
 ORDER BY ?cognome_persona"""

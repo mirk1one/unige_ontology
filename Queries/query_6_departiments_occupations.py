@@ -16,9 +16,9 @@ PREFIX sc: <http://www.schema.org/>
 SELECT DISTINCT ?dipartimento ?nome_dipartimento ?responsabilita ?persona ?nome_persona
 WHERE
 {
-	?dipartimento rdf:type ug:Department .
-	?dipartimento sc:name ?sigla .
-	?dipartimento sc:legalName ?nome_legale .
+  ?dipartimento rdf:type ug:Department .
+  ?dipartimento sc:branchCode ?sigla .
+  ?dipartimento sc:legalName ?nome_legale .
   BIND(CONCAT(?nome_legale, " - ", ?sigla) AS ?nome_dipartimento) .
   ?dipartimento sc:employee ?persona .
   ?persona sc:givenName ?nome .

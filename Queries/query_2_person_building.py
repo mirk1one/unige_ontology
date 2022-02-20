@@ -24,10 +24,13 @@ WHERE
   ?persona sc:familyName ?cognome_persona .
   ?persona sc:hasOccupation ?occupazione .
   ?occupazione sc:qualifications ?qualifica .
-  ?persona sc:worksFor ?dipartimento .
-  ?dipartimento sc:name ?sigla_dipartimento .
-  ?dipartimento sc:legalName ?nome_legale_dipartimento .
-  BIND(CONCAT(?nome_legale_dipartimento, " - ", ?sigla_dipartimento) AS ?nome_dipartimento) .
+  OPTIONAL
+  {
+    ?persona sc:worksFor ?dipartimento .
+    ?dipartimento sc:branchCode ?sigla_dipartimento .
+    ?dipartimento sc:legalName ?nome_legale_dipartimento .
+    BIND(CONCAT(?nome_legale_dipartimento, " - ", ?sigla_dipartimento) AS ?nome_dipartimento) .
+  } .
   ?edificio sc:address ?luogo .
   ?luogo sc:streetAddress ?via .
   ?luogo sc:postalCode ?cap .

@@ -95,9 +95,9 @@ def create_persona(file):
     file.write(f"\n# Definizione della persona {subj}\n")
     file.write(f"{subj} rdf:type sc:Person .\n")
     name = input("Inserisci il nome della persona: ")
-    file.write(f"{subj} sc:name \"{name}\" .\n")
+    file.write(f"{subj} sc:givenName \"{name}\" .\n")
     surname = input("Inserisci il cognome della persona: ")
-    file.write(f"{subj} sc:name \"{surname}\" .\n")
+    file.write(f"{subj} sc:familyName \"{surname}\" .\n")
     create = input("Vuoi creare l'oggetto dell'occupazione della persona (y/n): ")
     if create == 'y':
         obj = create_occupazione(file)
@@ -132,8 +132,8 @@ def create_persona(file):
     if create == 'y':
         obj = create_incarico(file)
         file.write(f"\n# Assegnazione della persona {subj} all'incarico {obj}\n")
-        file.write(f"{subj} ug:assigment {obj} .\n")
-        file.write(f"{obj} ug:assigment {subj} .\n")
+        file.write(f"{subj} ug:assignment {obj} .\n")
+        file.write(f"{obj} ug:assignment {subj} .\n")
     else:
         assign = input("Vuoi assegnare la persona ad un incarico esistente (y/n): ")
         if assign == 'y':
@@ -215,7 +215,7 @@ def create_contatto(file):
         file.write(f"{subj} sc:areaServed \"{area}\" .\n")
     stanza = input("Inserisci il codice della stanza: ")
     if stanza != '':
-        file.write(f"{subj} sc:description \"{stanza}\" .\n")
+        file.write(f"{subj} ug:roomCode \"{stanza}\" .\n")
     create = input("Vuoi creare l'URL alla planimetria della stanza relativo al contatto (y/n): ")
     if create == 'y':
         obj = create_url(file)
@@ -257,11 +257,12 @@ def create_dipartimento(file):
         assign = input("Vuoi assegnare il dipartimento ad un URL esistente (y/n): ")
         if assign == 'y':
             assign_dipartimento_url(file, subj, '')
+    create = input("Vuoi creare l'edificio relativo al dipartimento (y/n): ")
     create = ''
     while create != 'n':
-        create = input("Vuoi creare il ruolo di una persona nel dipartimento (y/n): ")
+        create = input("Vuoi creare un contatto del dipartimento (y/n): ")
         if create == 'y':
-            obj = create_occupazione(file)
+            obj = create_contatto(file)
             file.write(f"\n# Assegnazione del dipartimento {subj} al contatto {obj}\n")
             file.write(f"{subj} sc:contactPoint {obj} .\n")
             file.write(f"{obj} sc:contactPoint {subj} .\n")
@@ -321,9 +322,9 @@ def create_immagine(file):
     format = input("Inserisci il formato dell'immagine: ")
     file.write(f"{subj} sc:encodingFormat \"{format}\" .\n")
     height = input("Inserisci l'altezza dell'immagine: ")
-    file.write(f"{subj} sc:encodingFormat \"{height}\" .\n")
+    file.write(f"{subj} sc:height \"{height}\"^^xsd:int .\n")
     width = input("Inserisci la larghezza dell'immagine: ")
-    file.write(f"{subj} sc:encodingFormat \"{width}\" .\n")
+    file.write(f"{subj} sc:width \"{width}\"^^xsd:int .\n")
     create = input("Vuoi creare l'url dell'immagine (y/n): ")
     if create == 'y':
         obj = create_url(file)
@@ -353,9 +354,9 @@ def create_ssd(file):
     file.write(f"\n# Definizione del ssd {subj}\n")
     file.write(f"{subj} rdf:type ug:Ssd .\n")
     name = input("Inserisci il nome relativo: ")
-    file.write(f"{subj} sc:legalName {name} .\n")
+    file.write(f"{subj} sc:legalName \"{name}\" .\n")
     code = input("Inserisci il codice relativo: ")
-    file.write(f"{subj} sc:branchCode {code} .\n")
+    file.write(f"{subj} sc:branchCode \"{code}\" .\n")
     return subj
 
 

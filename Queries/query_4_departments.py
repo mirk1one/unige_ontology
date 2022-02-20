@@ -10,7 +10,7 @@ SELECT DISTINCT ?dipartimento ?nome (count(distinct ?persona) as ?numero_afferen
 WHERE
 {
   ?dipartimento rdf:type ug:Department .
-  ?dipartimento sc:name ?sigla .
+  ?dipartimento sc:branchCode ?sigla .
   ?dipartimento sc:legalName ?nome_legale .
   BIND(CONCAT(?nome_legale, " - ", ?sigla) AS ?nome) .
   ?dipartimento sc:employee ?persona .

@@ -517,8 +517,8 @@ Ogni entità ha i suoi campi definiti e le relazioni che collegano le varie enti
     - ug:occupationDepartment : dipartimento che integra l'occupazione.
 
 6) `sc:Role`
-  - sc:roleName : nome dell'incarico.
-  - ug:assignment : incarico della persona all'interno del suo dipartimento.
+    - sc:roleName : nome dell'incarico.
+    - ug:assignment : incarico della persona all'interno del suo dipartimento.
 
 6) `sc:ContactPoint`
     - sc:email : email del contatto.
@@ -586,18 +586,18 @@ In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno 
   PREFIX ug: <http://www.unige.it/2022/01/>
   PREFIX sc: <http://www.schema.org/>
   PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
-  
+
   SELECT DISTINCT ?edificio ?nome ?indirizzo
   WHERE
   {
-	?edificio rdf:type ug:CollegeOrUniversityBuilding .
-	?edificio sc:name ?nome .
-	OPTIONAL
+    ?edificio rdf:type ug:CollegeOrUniversityBuilding .
+    ?edificio sc:name ?nome .
+    OPTIONAL
     {
       ?edificio sc:address ?luogo .
-	  ?luogo sc:streetAddress ?via .
-	  ?luogo sc:postalCode ?cap .
-	  BIND(CONCAT(?via, ", ", ?cap) AS ?indirizzo) .
+	    ?luogo sc:streetAddress ?via .
+	    ?luogo sc:postalCode ?cap .
+	    BIND(CONCAT(?via, ", ", ?cap) AS ?indirizzo) .
     }
   }
   ```
@@ -612,26 +612,29 @@ In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno 
   SELECT DISTINCT ?edificio ?nome_persona ?cognome_persona ?qualifica ?nome_dipartimento ?nome_edificio ?indirizzo ?coordinate_maps
   WHERE
   {
-	?edificio rdf:type ug:CollegeOrUniversityBuilding .
-	?edificio sc:name ?nome_edificio .
-	?edificio sc:employee ?persona .
-	?persona sc:givenName ?nome_persona .
-	?persona sc:familyName ?cognome_persona .
-	?persona sc:hasOccupation ?occupazione .
-	?occupazione sc:qualifications ?qualifica .
-	?persona sc:worksFor ?dipartimento .
-    ?dipartimento sc:name ?sigla_dipartimento .
-	?dipartimento sc:legalName ?nome_legale_dipartimento .
-    BIND(CONCAT(?nome_legale_dipartimento, " - ", ?sigla_dipartimento) AS ?nome_dipartimento) .
-	?edificio sc:address ?luogo .
-	?luogo sc:streetAddress ?via .
-	?luogo sc:postalCode ?cap .
-	BIND(CONCAT(?via, ", ", ?cap) AS ?indirizzo) .
+    ?edificio rdf:type ug:CollegeOrUniversityBuilding .
+    ?edificio sc:name ?nome_edificio .
+    ?edificio sc:employee ?persona .
+    ?persona sc:givenName ?nome_persona .
+    ?persona sc:familyName ?cognome_persona .
+    ?persona sc:hasOccupation ?occupazione .
+    ?occupazione sc:qualifications ?qualifica .
+    OPTIONAL
+    {
+      ?persona sc:worksFor ?dipartimento .
+      ?dipartimento sc:branchCode ?sigla_dipartimento .
+      ?dipartimento sc:legalName ?nome_legale_dipartimento .
+      BIND(CONCAT(?nome_legale_dipartimento, " - ", ?sigla_dipartimento) AS ?nome_dipartimento) .
+    } .
+    ?edificio sc:address ?luogo .
+    ?luogo sc:streetAddress ?via .
+    ?luogo sc:postalCode ?cap .
+    BIND(CONCAT(?via, ", ", ?cap) AS ?indirizzo) .
     ?edificio ug:geo ?coordinate .
-	?coordinate geo:lat ?lat .
-	?coordinate geo:long ?long .
-	BIND(CONCAT("https://google.com/maps?q=", STR(?lat), ",", STR(?long)) AS ?coordinate_maps) .
-	FILTER (?nome_edificio = "<nome_edificio>")
+    ?coordinate geo:lat ?lat .
+    ?coordinate geo:long ?long .
+    BIND(CONCAT("https://google.com/maps?q=", STR(?lat), ",", STR(?long)) AS ?coordinate_maps) .
+	  FILTER (?nome_edificio = "<nome_edificio>")
   }
   ORDER BY ?cognome_persona
   ```
@@ -645,11 +648,11 @@ In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno 
   SELECT DISTINCT ?edificio ?nome_persona ?cognome_persona ?ssd ?nome_edificio ?url_planimetria ?stanza ?telefono ?email
   WHERE
   {
-	?edificio rdf:type ug:CollegeOrUniversityBuilding .
-	?edificio sc:name ?nome_edificio .
-	?edificio sc:employee ?persona .
-	?persona sc:givenName ?nome_persona .
-	?persona sc:familyName ?cognome_persona .
+    ?edificio rdf:type ug:CollegeOrUniversityBuilding .
+    ?edificio sc:name ?nome_edificio .
+    ?edificio sc:employee ?persona .
+    ?persona sc:givenName ?nome_persona .
+    ?persona sc:familyName ?cognome_persona .
     OPTIONAL
     {
       ?persona sc:member ?settore .
@@ -657,14 +660,17 @@ In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno 
       ?settore sc:branchCode ?ssd_codice .
       BIND(CONCAT(?ssd_nome, " - ", ?ssd_codice) AS ?ssd) .
     }
-	?persona sc:contactPoint ?contatto .
-	?contatto sc:telephone ?telefono .
-	OPTIONAL { ?contatto sc:email ?email } .
-	OPTIONAL { ?contatto ug:roomCode ?stanza } .
-	?contatto sc:areaServed ?area .
-	?contatto sc:url ?url_planimetria .
-	?url_planimetria ug:link ?planimetria .
-	FILTER (?nome_edificio = "<nome_edificio>" && ?area = "<nome_edificio>")
+    ?persona sc:contactPoint ?contatto .
+    ?contatto sc:telephone ?telefono .
+    OPTIONAL { ?contatto sc:email ?email } .
+    OPTIONAL { ?contatto ug:roomCode ?stanza } .
+    OPTIONAL
+    {
+      ?contatto sc:areaServed ?area .
+      ?contatto sc:url ?url_planimetria .
+      ?url_planimetria ug:link ?planimetria .
+    }
+	  FILTER (?nome_edificio = "<nome_edificio>" && ?area = "<nome_edificio>")
   }
   ORDER BY ?cognome_persona
   ```
@@ -678,27 +684,36 @@ In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno 
   SELECT DISTINCT ?persona ?nome ?cognome ?link_immagine ?telefono ?email ?ruolo ?nome_ssd ?nome_dipartimento ?link_cv
   WHERE
   {
-	?persona rdf:type sc:Person .
+    ?persona rdf:type sc:Person .
     ?persona sc:givenName ?nome .
     ?persona sc:familyName ?cognome .
-	?persona sc:image ?immagine .
-	?immagine sc:url ?url_immagine .
-	?url_immagine ug:link ?link_immagine .
-	?persona sc:contactPoint ?contatto .
-	?contatto sc:telephone ?telefono .
-	?contatto sc:email ?email .
-	?persona sc:hasOccupation ?occupazione .
-	?occupazione sc:qualifications ?ruolo .
-    ?persona sc:member ?ssd .
-    ?ssd sc:legalName ?ssd_nome_legale .
-    ?ssd sc:branchCode ?ssd_sigla .
-    BIND(CONCAT(?ssd_sigla, " - ", ?ssd_nome_legale) AS ?nome_ssd) .
-	?persona sc:worksFor ?dipartimento .
-	?dipartimento sc:name ?sigla_dipartimento .
-	?dipartimento sc:legalName ?nome_legale_dipartimento .
-    BIND(CONCAT(?nome_legale_dipartimento, " - ", ?sigla_dipartimento) AS ?nome_dipartimento) .
-    ?persona sc:url ?url .
-    ?url ug:link ?link_cv .
+    ?persona sc:image ?immagine .
+    ?immagine sc:url ?url_immagine .
+    ?url_immagine ug:link ?link_immagine .
+    ?persona sc:contactPoint ?contatto .
+    ?contatto sc:telephone ?telefono .
+    ?contatto sc:email ?email .
+    ?persona sc:hasOccupation ?occupazione .
+    ?occupazione sc:qualifications ?ruolo .
+    OPTIONAL
+    {
+      ?persona sc:member ?ssd .
+      ?ssd sc:legalName ?ssd_nome_legale .
+      ?ssd sc:branchCode ?ssd_sigla .
+      BIND(CONCAT(?ssd_sigla, " - ", ?ssd_nome_legale) AS ?nome_ssd) .
+    } .
+    OPTIONAL
+    {
+      ?persona sc:worksFor ?dipartimento .
+      ?dipartimento sc:branchCode ?sigla_dipartimento .
+      ?dipartimento sc:legalName ?nome_legale_dipartimento .
+      BIND(CONCAT(?nome_legale_dipartimento, " - ", ?sigla_dipartimento) AS ?nome_dipartimento) .
+    } .
+    OPTIONAL
+    {
+      ?persona sc:url ?url .
+      ?url ug:link ?link_cv .
+    } .
 	FILTER (?nome = "<nome_persona>" && ?cognome = "<cognome_persona>")
   }
   ```
@@ -712,11 +727,11 @@ In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno 
   SELECT DISTINCT ?dipartimento ?nome (count(distinct ?persona) as ?numero_afferenti)
   WHERE
   {
-	?dipartimento rdf:type ug:Department .
-	?dipartimento sc:name ?sigla .
-	?dipartimento sc:legalName ?nome_legale .
+    ?dipartimento rdf:type ug:Department .
+    ?dipartimento sc:branchCode ?sigla .
+    ?dipartimento sc:legalName ?nome_legale .
     BIND(CONCAT(?nome_legale, " - ", ?sigla) AS ?nome) .
-	?dipartimento sc:employee ?persona .
+    ?dipartimento sc:employee ?persona .
   }
   GROUP BY ?dipartimento ?nome
   ```
@@ -731,21 +746,21 @@ In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno 
   SELECT DISTINCT ?dipartimento ?nome ?tipo_contatto ?dettaglio_contatto ?altro_dato
   WHERE
   {
-	?dipartimento rdf:type ug:Department .
-	?dipartimento sc:name ?sigla .
-	?dipartimento sc:legalName ?nome_legale .
+    ?dipartimento rdf:type ug:Department .
+    ?dipartimento sc:branchCode ?sigla .
+    ?dipartimento sc:legalName ?nome_legale .
     BIND(CONCAT(?nome_legale, " - ", ?sigla) AS ?nome) .
-	{
+    {
       ?dipartimento sc:address ?luogo .
       BIND("Indirizzo" AS ?tipo_contatto) .
       ?luogo sc:streetAddress ?via .
-	  ?luogo sc:postalCode ?cap .
+      ?luogo sc:postalCode ?cap .
       ?luogo sc:addressLocality ?citta .
-	  BIND(CONCAT(?via, ", ", ?cap, ", ", ?citta) AS ?dettaglio_contatto) .
+      BIND(CONCAT(?via, ", ", ?cap, ", ", ?citta) AS ?dettaglio_contatto) .
       ?dipartimento ug:geo ?coordinate .
-	  ?coordinate geo:lat ?lat .
-	  ?coordinate geo:long ?long .
-	  BIND(CONCAT("https://google.com/maps?q=", STR(?lat), ",", STR(?long)) AS ?altro_dato) .
+      ?coordinate geo:lat ?lat .
+      ?coordinate geo:long ?long .
+      BIND(CONCAT("https://google.com/maps?q=", STR(?lat), ",", STR(?long)) AS ?altro_dato) .
     } UNION
     {
       ?dipartimento sc:contactPoint ?contatto .
@@ -777,7 +792,7 @@ In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno 
       ?contatto ug:link ?dettaglio_contatto .
       BIND("" AS ?altro_dato) .
     }
-	FILTER (?sigla = "<codice_dipartimento>")
+	  FILTER (?sigla = "<codice_dipartimento>")
   }
   ```
 
@@ -791,7 +806,7 @@ In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno 
   WHERE
   {
     ?dipartimento rdf:type ug:Department .
-    ?dipartimento sc:name ?sigla .
+    ?dipartimento sc:branchCode ?sigla .
     ?dipartimento sc:legalName ?nome_legale .
     BIND(CONCAT(?nome_legale, " - ", ?sigla) AS ?nome_dipartimento) .
     ?dipartimento sc:employee ?persona .
@@ -810,11 +825,11 @@ In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno 
   PREFIX ug: <http://www.unige.it/2022/01/>
   PREFIX sc: <http://www.schema.org/>
 
-  SELECT DISTINCT ?dipartimento ?nome ?qualifica ?afferenza (group_concat(DISTINCT ?dato_contatto, "; ") as ?contatti)
+  SELECT DISTINCT ?dipartimento ?nome ?qualifica ?afferenza ?email ?telefono
   WHERE
   {
     ?dipartimento rdf:type ug:Department .
-    ?dipartimento sc:name ?sigla .
+    ?dipartimento sc:branchCode ?sigla .
     ?dipartimento sc:legalName ?nome_legale .
     BIND(CONCAT(?nome_legale, " - ", ?sigla) AS ?afferenza) .
     ?dipartimento sc:employee ?persona .
@@ -823,33 +838,11 @@ In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno 
     BIND(CONCAT(?nome_persona, " ", ?cognome_persona) AS ?nome) .
     ?persona sc:hasOccupation ?occupazione .
     ?occupazione sc:qualifications ?qualifica .
-    {
-      SELECT ?dato_contatto
-      WHERE
-      {
-        ?p sc:givenName ?nome_persona .
-        ?p sc:familyName ?cognome_persona .
-        ?p sc:contactPoint ?c .
-        ?c sc:telephone ?v .
-        ?c sc:contactType ?t .
-        BIND(CONCAT(?v, " ", ?t) AS ?dato_contatto) .
-      }
-    } UNION
-    {
-      SELECT ?dato_contatto
-      WHERE
-      {
-        ?p sc:givenName ?nome_persona .
-        ?p sc:familyName ?cognome_persona .
-        ?p sc:contactPoint ?c .
-        ?c sc:email ?v .
-        ?c sc:contactType ?t .
-        BIND(CONCAT(?v, " ", ?t) AS ?dato_contatto) .
-      }
-    }
+    ?persona sc:contactPoint ?contatto .
+    OPTIONAL {?contatto sc:email ?email} .
+    OPTIONAL {?contatto sc:telephone ?telefono} .
 	  FILTER (?sigla = "<codice_dipartimento>")
   }
-  GROUP BY ?dipartimento ?nome ?qualifica ?afferenza
   ```
 
 - `query_8_ssds.py`: Restituisce tutti i settori scientifici disciplinari con nome e sigla. Richiama la seguente query.
@@ -861,9 +854,9 @@ In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno 
   SELECT DISTINCT ?ssd ?sigla ?nome
   WHERE
   {
-    ?ssd rdf:type ug:Ssd .
-    ?ssd sc:branchCode ?sigla .
-    ?ssd sc:legalName ?nome .
+	  ?ssd rdf:type ug:Ssd .
+	  ?ssd sc:branchCode ?sigla .
+	  ?ssd sc:legalName ?nome .
   }
   ```
 
@@ -873,46 +866,29 @@ In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno 
   PREFIX ug: <http://www.unige.it/2022/01/>
   PREFIX sc: <http://www.schema.org/>
 
-  SELECT DISTINCT ?ssd ?nome ?afferenza (group_concat(DISTINCT ?dato_contatto, "; ") as ?contatti)
+  SELECT DISTINCT ?ssd ?nome ?afferenza ?ssd_nome ?email ?telefono
   WHERE
   {
     ?ssd rdf:type ug:Ssd .
     ?ssd sc:branchCode ?codice_ssd .
+    ?ssd sc:legalName ?nome_ssd .
+    BIND(CONCAT(?codice_ssd, " - ", ?nome_ssd) AS ?ssd_nome) .
     ?ssd sc:member ?persona .
     ?persona sc:givenName ?nome_persona .
     ?persona sc:familyName ?cognome_persona .
     BIND(CONCAT(?nome_persona, " ", ?cognome_persona) AS ?nome) .
-    ?persona sc:worksFor ?dipartimento .
-    ?dipartimento sc:name ?sigla_dipartimento .
-    ?dipartimento sc:legalName ?nome_dipartimento .
-    BIND(CONCAT(?nome_dipartimento, " - ", ?sigla_dipartimento) AS ?afferenza) .
+    OPTIONAL
     {
-      SELECT ?dato_contatto
-      WHERE
-      {
-        ?p sc:givenName ?nome_persona .
-        ?p sc:familyName ?cognome_persona .
-        ?p sc:contactPoint ?c .
-        ?c sc:telephone ?v .
-        ?c sc:contactType ?t .
-        BIND(CONCAT(?v, " ", ?t) AS ?dato_contatto) .
-      }
-    } UNION
-    {
-      SELECT ?dato_contatto
-      WHERE
-      {
-        ?p sc:givenName ?nome_persona .
-        ?p sc:familyName ?cognome_persona .
-        ?p sc:contactPoint ?c .
-        ?c sc:email ?v .
-        ?c sc:contactType ?t .
-        BIND(CONCAT(?v, " ", ?t) AS ?dato_contatto) .
-      }
+      ?persona sc:worksFor ?dipartimento .
+      ?dipartimento sc:branchCode ?sigla_dipartimento .
+      ?dipartimento sc:legalName ?nome_dipartimento .
+      BIND(CONCAT(?nome_dipartimento, " - ", ?sigla_dipartimento) AS ?afferenza) .
     }
+    ?persona sc:contactPoint ?contatto .
+    OPTIONAL {?contatto sc:email ?email} .
+    OPTIONAL {?contatto sc:telephone ?telefono} .
     FILTER (?codice_ssd = "<codice_ssd>")
   }
-  GROUP BY ?ssd ?nome ?afferenza
   ```
 
 ### Virtuoso
@@ -921,4 +897,4 @@ In seguito riporto in dettaglio tutti gli script e la loro funzione all'interno 
 
 - `virtuoso_call_sparql.py`: questo file è quello che viene richiamato da tutte le queries (infatti è importante che risieda nella stessa cartella degli script delle queries) al fine di creare un wrapper dell'endpoint SPARQL che si trova in Virtuoso, per poter richiamare le queries. Come si può notare nel file viene creato un SPARQLWrapper che comunicherà all'indirizzo dell'endpoint SPARQL, che nel mio caso sarà `http://localhost:8890/sparql`, a seconda della configurazione fatta inizialmente se non si è seguito passo per passo quello descritto precedentemente, di dovrà sostituire questa URL con quella esatta. Dopo aver fatto questo, prende la query creata dagli scripts precedenti e fa ritornare il risultato in un file turtle (`.ttl`) che verrà creato in una repository chiamata `Result_yyyy_MM_dd` dove `yyyy` sta per l'anno, `MM` sta per il mese e `dd` sta per il giorno in cui è stata eseguita la query; il file turtle salvato all'interno avrà come nome `<script eseguito>_yyyy_MM_dd_hh_mm_ss` dove `yyyy` sta per l'anno, `MM` sta per il mese, `dd` sta per il giorno, `hh` sta per le ore, `mm` sta per i minuti e `ss` sta per i secondi in cui il file è stato creato. Questo file conterrà il risultato della query eseguita e allo stesso tempo verrà stampato l'output anche su console.
 
-- `virtuoso_clear_old_results`: un file molto semplice che prendendo come opzione `-d` | `--days` `<numero_giorni>`, cancellerà tutte le cartelle `Result` che vanno da quel numero di giorni a prima.
+- `virtuoso_clear_old_results`: un file molto semplice che prendendo come opzione `-d` | `--days` `<numero_giorni>`, cancellerà tutte le cartelle `Result` che vanno da quel numero di giorni precedenti da oggi in poi.
