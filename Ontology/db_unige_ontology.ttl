@@ -11,6 +11,7 @@
 # Definizione di edificio e di dipartimento
 ug:CollegeOrUniversityBuilding rdfs:subClassOf sc:CollegeOrUniversity .
 ug:Department rdfs:subClassOf sc:EducationOrganization .
+ug:Ssd rdfs:subClassOf sc:EducationOrganization .
 
 # Definizione di punto geolocalizzato
 ug:geo rdf:type rdf:Property .

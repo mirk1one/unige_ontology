@@ -12,9 +12,10 @@ def create_ontology(name):
     f.write("@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n")
     f.write("@prefix xml: <http://www.w3.org/XML/1998/namespace> .\n")
     f.write("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n")
-    f.write("# Definizione di edificio e di dipartimento\n")
+    f.write("# Definizione di edificio, dipartimento e ssd\n")
     f.write("ug:CollegeOrUniversityBuilding rdfs:subClassOf sc:CollegeOrUniversity .\n")
     f.write("ug:Department rdfs:subClassOf sc:EducationOrganization .\n\n")
+    f.write("ug:Ssd rdfs:subClassOf sc:EducationOrganization .\n\n")
     f.write("# Definizione di occupazione nel dipartimento\n")
     f.write("ug:occupationDepartment rdf:type rdf:Property .\n")
     f.write("ug:occupationDepartment rdfs:label \"Il dipartimento in cui la persona occupa il ruolo\" .\n")
@@ -257,7 +258,6 @@ def create_dipartimento(file):
         assign = input("Vuoi assegnare il dipartimento ad un URL esistente (y/n): ")
         if assign == 'y':
             assign_dipartimento_url(file, subj, '')
-    create = input("Vuoi creare l'edificio relativo al dipartimento (y/n): ")
     create = ''
     while create != 'n':
         create = input("Vuoi creare un contatto del dipartimento (y/n): ")

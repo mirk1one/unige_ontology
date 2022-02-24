@@ -566,6 +566,179 @@ Si suppone che per ciascuno script Python vengano installate le librerie relativ
 
 In particolare, un file di esempio creato da questo script è stato condiviso nella cartella `Ontology`, con il nome di `db_unige_ontology.ttl`. Lo scopo è quello di creare questo file in modo che sia il popolamento del database di Virtuoso, quindi quel file da inserire all'interno della cartella `Unige`, come descritto nella parte di [inserimento dei linked data nel database](#inserimento-dei-linked-data-nel-database).
 
+Qua sotto viene riportato un esempio di esecuzione del file e di creazione di una entità, nelle parti di UI vengono riportate in grassetto le esecuzioni dell'utente.
+
+Inizialmente si crea il database di Unige con i prefissi e le entità customizzate, e in seguito si crea l'edificio "Villa Cambiaso" con il suo indirizzo e le sue coordinate geo:
+
+<pre><code>Seleziona il nome del file (senza estensione): <b>db_unige_ontology</b></code></pre>
+
+Viene prima richiesto il nome del file da inserire da input all'utente, senza aggiungere l'estensione (creerà automaticamente un file turtle .ttl), e inizierà ad inserire i dati di base (prefissi, definizione di edificio, diparimento e ssd e le proprità custom create), in seguito verrà visualizzato un menù con le operazioni disponibili:
+
+<pre><code>Seleziona un tra le seguenti operazioni digitando la lettera iniziale.
+
+1) Aggiungi un soggetto
+2) Assegna un soggetto ad un oggetto
+3) Esci dal programma
+Inserisci un'operazione: <b>1</b></code></pre>
+
+Viene richiesto se si vuole creare da zero un soggetto da aggiungere al database (`1`), se si vuole associare un soggetto esistente ad un oggetto, quindi aggiungere una proprietà che associ due entità (`2`) oppure terminare il programma (`3`). Volendo creare una entità, inserisco l'opzione `1`.
+
+<pre><code>a) Aggiungi un edificio
+b) Aggiungi un indirizzo
+c) Aggiungi una persona
+d) Aggiungi una occupazione
+e) Aggiungi un contatto
+f) Aggiungi un url
+g) Aggiungi una immagine
+h) Aggiungi un dipartimento
+i) Aggiungi una coordinata geo
+j) Aggiungi un settore scientifico disciplinare
+z) Torna indietro
+Inserisci un'operazione: <b>a</b></code></pre>
+
+In seguito verrà visualizzata una lista di possibili entità da aggiungere, essendo interessati ad aggiungere "Villa Bonino" che è un edificio, si inserirà come operazione `a`.
+
+<pre><code>Inserisci il soggetto all'edificio: <<b>https://rubrica.unige.it/edifici/ED_161450104</b>>
+Inserisci il nome dell'edificio: <b>Villa Cambiaso</b>
+Vuoi creare l'oggetto indirizzo relativo (y/n): <b>y</b>
+Inserisci il soggetto all'indirizzo: <b>ug:Via_Montallegro</b>
+Inserisci la località dell'indirizzo: <b>GENOVA</b>
+Inserisci la via dell'indirizzo: <b>via Montallegro 1</b>
+Inserisci il codice postale dell'indirizzo: <b>16145</b>
+Vuoi creare le coordinate dell'edificio (y/n): <b>y</b>
+Inserisci il soggetto di coordinate geo: <b>ug:Via_Montallegro_Coordinates</b>
+Inserisci la latitudine relativa: <b>44.4028967</b>
+Inserisci la longitudine relativa: <b>8.9632666</b>
+Vuoi creare il dipartimento relativo all'edificio (y/n): <b>n</b>
+Vuoi assegnare un dipartimento esistente all'edificio (y/n): <b>n</b></code></pre>
+
+A questo punto verranno chiesti iterativamente tutti i dati dell'edificio, e anche creare le entità che hanno una proprietà con l'edificio (l'indirizzo sc:PostalAddress, le coordinate georeferenziate geo:Point e il diparimento ug:Department). In questo esempio viene inserito come soggetto l'url all'edificio `<https://rubrica.unige.it/edifici/ED_161450104>` e il suo nome `Villa Cambiaso`, poi digitando `y` posso creare il soggetto dell'indirizzo, inserendo l'url `ug:Via_Montallegro` (ug essendo il prefisso di Unige creerà il soggetto `<http://www.unige.it/2022/01/Via_Montallegro>`), la città `GENOVA`, il nome dell'indirizzo `via Montallegro 1` e il cap `16145`, in seguito si creano le coordinate georefenziate relative `ug:Via_Montallegro_Coordinates` (ug essendo il prefisso di Unige creerà il soggetto `<http://www.unige.it/2022/01/Via_Montallegro_Coordinates>`) con le sue coordinate di latitudine `44.4028967` e longitudine `8.9632666`, poi digitando `n` e `n` non creo l'entità del dipartimento (perchè potrebbe già esistere) e non associo un dipartimento già esistente (perchè potrebbe essere già associata). Nell'esempio supponiamo di avere già l'entità creata del dipartimento `DIBRIS` già creata precedentemente (il soggetto `<https://rubrica.unige.it/strutture/struttura/100023>`).
+
+<pre><code>a) Aggiungi un edificio
+b) Aggiungi un indirizzo
+c) Aggiungi una persona
+d) Aggiungi una occupazione
+e) Aggiungi un contatto
+f) Aggiungi un url
+g) Aggiungi una immagine
+h) Aggiungi un dipartimento
+i) Aggiungi una coordinata geo
+j) Aggiungi un settore scientifico disciplinare
+z) Torna indietro
+Inserisci un'operazione: <b>z</b>
+Seleziona un tra le seguenti operazioni digitando la lettera iniziale.
+
+1) Aggiungi un soggetto
+2) Assegna un soggetto ad un oggetto
+3) Esci dal programma
+Inserisci un'operazione: <b>2</b></code></pre>
+
+Alla fine dell'inserimento averemo questa situazione, se volessimo associare il dipartimento all'edificio basterà, nel menù di inserimento delle entità riproposto precedentemente, digitare su `z` per tornare indietro al menù iniziare e digitare su `2` per associare un soggetto ad un oggetto.
+
+<pre><code>a) Assegna un indirizzo ad un edificio
+b) Assegna un indirizzo ad un dipartimento
+c) Assegna una persona ad un edificio
+d) Assegna una persona ad un dipartimento
+e) Assegna una persona ad un incarico
+f) Assegna una occupazione ad una persona
+g) Assegna un contatto ad una persona
+h) Assegna un url ad una persona
+i) Assegna una immagine ad una persona
+j) Assegna una immagine ad un url
+k) Assegna un url ad un contatto
+l) Assegna un contatto ad un dipartimento
+m) Assegna una coordinata geo ad un edificio
+n) Assegna una coordinata geo ad un dipartimento
+o) Assegna una occupazione ad un dipartimento
+p) Assegna una edificio ad un dipartimento
+q) Assegna un contatto ad un dipartimento
+r) Assegna una persona ad un settore scientifico disciplinare
+z) Torna indietro
+Inserisci un'operazione: <b>p</b></code></pre>
+
+Questo menù comparirà per poter selezionare quali oggetti vogliamo collegare con una proprietà, quindi selezionando `p` si potrà associare il dipartimento `DIBRIS` all'edificio `Villa Bonino`.
+
+<pre><code>Inserisci il soggetto del dipartimento: <<b>https://rubrica.unige.it/strutture/struttura/100023</b>>
+Inserisci l'oggetto dell'edificio: <<b>https://rubrica.unige.it/edifici/ED_161450104</b>></code></pre>
+
+L'utente inserirà il soggetto dipartimento e l'oggetto edificio, così da creare la proprietà che li unisce.
+
+```
+# Prefissi usati nella ontologia
+@prefix ug: <http://www.unige.it/2022/01/> .
+@prefix sc: <http://www.schema.org/> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Definizione di edificio, dipartimento e ssd
+ug:CollegeOrUniversityBuilding rdfs:subClassOf sc:CollegeOrUniversity .
+ug:Department rdfs:subClassOf sc:EducationOrganization .
+ug:Ssd rdfs:subClassOf sc:EducationOrganization .
+
+# Definizione di occupazione nel dipartimento
+ug:occupationDepartment rdf:type rdf:Property .
+ug:occupationDepartment rdfs:label "Il dipartimento in cui la persona occupa il ruolo" .
+ug:occupationDepartment rdfs:domain sc:Occupation .
+ug:occupationDepartment rdfs:range ug:Department .
+
+# Definizione di punto geolocalizzato
+ug:geo rdf:type rdf:Property .
+ug:geo rdfs:label "Connette un punto geolocalizzato ad un posto" .
+ug:geo rdfs:domain sc:Place .
+ug:geo rdfs:range geo:Point .
+
+# Definizione del codice di una stanza
+ug:roomCode rdf:type rdf:Property .
+ug:roomCode rdfs:label "Aggiunge il codice della stanza dove lavora" .
+ug:roomCode rdfs:domain sc:ContactPoint .
+ug:roomCode rdfs:range sc:Text .
+
+# Definizione del link riferito ad un url
+ug:link rdf:type rdf:Property .
+ug:link rdfs:label "Collega un url al suo relativo collegamento" .
+ug:link rdfs:domain sc:URL .
+ug:link rdfs:range sc:Text .
+
+
+# Definizione dell'edificio <https://rubrica.unige.it/edifici/ED_161450104>
+<https://rubrica.unige.it/edifici/ED_161450104> rdf:type ug:CollegeOrUniversityBuilding .
+<https://rubrica.unige.it/edifici/ED_161450104> sc:name "Villa Cambiaso" .
+
+# Definizione dell'indirizzo ug:Via_Montallegro
+ug:Via_Montallegro rdf:type ug:PostalAddress .
+ug:Via_Montallegro sc:addressLocality "GENOVA" .
+ug:Via_Montallegro sc:streetAddress "via Montallegro 1" .
+ug:Via_Montallegro sc:postalCode "16145" .
+
+# Assegnazione dell'edificio <https://rubrica.unige.it/edifici/ED_161450104> all'indirizzo ug:Via_Montallegro
+<https://rubrica.unige.it/edifici/ED_161450104> sc:address ug:Via_Montallegro .
+ug:Via_Montallegro sc:address <https://rubrica.unige.it/edifici/ED_161450104> .
+
+# Definizione della coordinata geo ug:Via_Montallegro_Coordinates
+ug:Via_Montallegro_Coordinates rdf:type geo:Point .
+ug:Via_Montallegro_Coordinates sc:lat "44.4028967"^^xsd:float .
+ug:Via_Montallegro_Coordinates sc:long "8.9632666"^^xsd:float .
+
+# Assegnazione dell'edificio <https://rubrica.unige.it/edifici/ED_161450104> alle coordinate geo ug:Via_Montallegro_Coordinates
+<https://rubrica.unige.it/edifici/ED_161450104> ug:geo ug:Via_Montallegro_Coordinates .
+ug:Via_Montallegro_Coordinates ug:geo <https://rubrica.unige.it/edifici/ED_161450104> .
+
+# Definizione del dipartimento <https://rubrica.unige.it/strutture/struttura/100023> -> AGGIUNTA ANCHE SE NON PRESENTE NELL'ESEMPIO
+<https://rubrica.unige.it/strutture/struttura/100023> rdf:type ug:Department .
+<https://rubrica.unige.it/strutture/struttura/100023> sc:branchCode "DIBRIS" .
+<https://rubrica.unige.it/strutture/struttura/100023> sc:legalName "Dipartimento di Informatica, bioingegneria, robotica e ingegneria dei sistemi" .
+
+# Assegnazione del dipartimento <https://rubrica.unige.it/strutture/struttura/100023> all'edificio <https://rubrica.unige.it/edifici/ED_161450104>
+<https://rubrica.unige.it/strutture/struttura/100023> sc:department <https://rubrica.unige.it/edifici/ED_161450104> .
+<https://rubrica.unige.it/edifici/ED_161450104> sc:department <https://rubrica.unige.it/strutture/struttura/100023> .
+```
+
+A questo punto per terminare l'esecuzione alla comparsa del menù è stato digitato `z` e in seguito `3` per concludere l'esecuzione, così in locale sarà stato creato il file `db_unige_ontology.ttl`.
+
 ### Ontology
 
 `Ontology` è la cartella che contiene due files turtle:

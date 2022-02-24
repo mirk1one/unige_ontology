@@ -27,33 +27,33 @@ ug:link rdfs:label "Collega un url al suo relativo collegamento" .
 ug:link rdfs:domain sc:URL .
 ug:link rdfs:range sc:Text .
 
-ug:CollegeOrUniversityBuilding rdfs:subClassOf sc:CollegeOrUniversity .
+ug:CollegeOrUniversityBuilding rdfs:subClassOf sc:CollegeOrUniversity . #Definizione di edificio
 ug:CollegeOrUniversityBuilding sc:name sc:Text .
 
 ug:CollegeOrUniversityBuilding sc:address sc:PostalAddress .
 sc:PostalAddress sc:address ug:CollegeOrUniversityBuilding .
 
-sc:PostalAddress sc:addressLocality sc:Text .
+sc:PostalAddress sc:addressLocality sc:Text . #Definizione di indirizzo
 sc:PostalAddress sc:streetAddress sc:Text .
 sc:PostalAddress sc:postalCode sc:Text .
 
 ug:CollegeOrUniversityBuilding sc:employee sc:Person .
 sc:Person sc:affiliation ug:CollegeOrUniversityBuilding .
 
-sc:Person sc:givenName sc:Text .
+sc:Person sc:givenName sc:Text . #Definizione di persona
 sc:Person sc:familyName sc:Text .
 sc:Person sc:relatedTo sc:Person . #Per chi condivide la stanza con un altro
 
 sc:Person sc:hasOccupation sc:Occupation .
 sc:Occupation sc:hasOccupation sc:Person .
 
-sc:Occupation sc:qualifications sc:Text .
+sc:Occupation sc:qualifications sc:Text . #Definizione di occupazione
 sc:Occupation sc:responsabilities sc:Text .
 
 sc:Person sc:url sc:URL . #Url al curriculum
 sc:URL sc:url sc:Person .
 
-sc:URL sc:description sc:Text .
+sc:URL sc:description sc:Text . #Definizione di Url
 sc:URL ug:link sc:Text .
 
 sc:ContactPoint sc:url sc:URL . #Url della planimetria della stanza
@@ -62,7 +62,7 @@ sc:URL sc:url sc:ContactPoint .
 sc:Person sc:contactPoint sc:ContactPoint .
 sc:ContactPoint sc:contactPoint sc:Person .
 
-sc:ContactPoint sc:email sc:Text .
+sc:ContactPoint sc:email sc:Text . #Definizione di contatto
 sc:ContactPoint sc:telephone sc:Text .
 sc:ContactPoint sc:faxNumber sc:Text .
 sc:ContactPoint sc:contactType sc:Text . #Si specifica se è un tipo di telefono, una PEC, ...
@@ -72,7 +72,7 @@ sc:ContactPoint ug:roomCode sc:Text .
 sc:Person sc:image sc:ImageObject .
 sc:ImageObject sc:image sc:Person .
 
-sc:ImageObject sc:caption sc:Text .
+sc:ImageObject sc:caption sc:Text . #Definizione di immagine
 sc:ImageObject sc:encodingFormat sc:Text .
 sc:ImageObject sc:height xsd:Int .
 sc:ImageObject sc:width xsd:Int .
@@ -96,7 +96,7 @@ sc:PostalAddress sc:address ug:Department .
 ug:Department sc:employee sc:Person .
 sc:Person sc:worksFor ug:Department .
 
-sc:Role sc:roleName sc:Text .
+sc:Role sc:roleName sc:Text . #Definizione di ruolo
 
 sc:Person ug:assignment sc:Role . #Per descrivere gli incarichi nel dipartimento
 sc:Role ug:assignment sc:Person .
@@ -113,7 +113,7 @@ geo:Point ug:geo ug:CollegeOrUniversityBuilding .
 ug:Department ug:geo geo:Point .
 geo:Point ug:geo ug:Department .
 
-geo:Point geo:lat xsd:Float .
+geo:Point geo:lat xsd:Float . #Definizione di punto georeferenziato
 geo:Point geo:long xsd:Float .
 
 ug:Ssd rdfs:subClassOf sc:EducationOrganization . #Definizione di ssd
